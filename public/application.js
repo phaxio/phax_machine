@@ -158,7 +158,8 @@ var phaxMachine = {
 		},
 
 		formatTimestamp: function(timeInSeconds) {
-			return String(new Date(timeInSeconds))
+			// Value must be converted to milliseconds
+			return String(new Date(timeInSeconds * 1000))
 		}
 	},
 
