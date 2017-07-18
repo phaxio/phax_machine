@@ -78,8 +78,6 @@ var phaxMachine = {
 				})
 
 				recipientsTable.find("tbody").append(recipientRow)
-				console.log(recipientRow)
-				console.log(recipientsTable)
 			})
 			modal.modal("show")
 		},
