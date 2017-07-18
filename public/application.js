@@ -179,7 +179,7 @@ var phaxMachine = {
 						if (jqXhr.upload) {
 							jqXhr.upload.addEventListener('progress', function(e) {
 								if (e.lengthComputable) {
-									var percentStr = String(Math.floor(100 * (e.total / e.loaded)))
+									var percentStr = String(Math.floor(100 * (e.loaded / e.total)))
 									$("#faxFileProgress").show().text(
 										"Uploading file: " + percentStr + "%"
 									)
