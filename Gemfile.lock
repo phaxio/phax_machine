@@ -1,0 +1,36 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    httmultiparty (0.3.16)
+      httparty (>= 0.7.3)
+      mimemagic
+      multipart-post
+    httparty (0.15.5)
+      multi_xml (>= 0.5.2)
+    mimemagic (0.3.2)
+    multi_xml (0.6.0)
+    multipart-post (2.0.0)
+    mustermann (1.0.0)
+    phaxio (0.5.0)
+      httmultiparty
+    rack (2.0.3)
+    rack-protection (2.0.0)
+      rack
+    sinatra (2.0.0)
+      mustermann (~> 1.0)
+      rack (~> 2.0)
+      rack-protection (= 2.0.0)
+      tilt (~> 2.0)
+    tilt (2.0.7)
+    time_math2 (0.0.8)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  phaxio
+  sinatra
+  time_math2
+
+BUNDLED WITH
+   1.13.6

@@ -1,0 +1,24 @@
+<!--
+	TODO:
+	- Hide progress on completion
+	- Disable button while request pending
+-->
+<main id="sendFax">
+	<h1>Send a Fax</h1>
+
+	<form enctype="multipart/form-data" id="sendFaxForm">
+		<div class="form-group">
+			<label for="to">To</label>
+			<input id="to" name="to" type="tel" placeholder="+15558675309" class="form-control" required>
+		</div>
+
+		<div class="form-group">
+			<label for="file">File</label>
+			<input id="file" name="file" type="file" required>
+
+			<div id="faxFileProgress" hidden="hidden"></div>
+		</div>
+
+		<button type="submit" value="Upload" class="btn btn-primary">Send</button>
+	</form>
+</main>
