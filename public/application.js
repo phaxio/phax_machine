@@ -5,6 +5,7 @@ var phaxMachine = {
 				if (response.success) {
 					phaxMachine.createAlert("success", response.message)
 					phaxMachine.faxLogs.populateFaxLogsTable(response.data)
+					phaxMachine.faxLogs.makeRecipientsClickable()
 				}
 				else {
 					phaxMachine.createAlert("danger", response.message)
@@ -20,8 +21,8 @@ var phaxMachine = {
 
 		populateFaxLogsTable: function(faxesData) {
 			var logAttributes = [
-				"id", "num_pages", "cost", "direction", "status", "",
-				"requested_at", ""
+				"id", "num_pages", "cost", "direction", "status", "type",
+				"requested_at", "recipients"
 			]
 
 			faxesData.forEach(function(faxData) {
@@ -30,24 +31,89 @@ var phaxMachine = {
 				var tableRow = $("<tr></tr>")
 				logAttributes.forEach(function(logAttribute) {
 					var cell = $("<td></td>")
+					cell.data("fax-attribute", logAttribute)
 					cell.append(faxData[logAttribute])
 					tableRow.append(cell)
 				})
+				tableRow.data("recipients", faxData.recipientsData)
 				$("#fax-log-table").find("tbody").append(tableRow)
 			})
 		},
 
-		processFaxData: function(faxData) {
+		makeRecipientsClickable: function() {
+			var recipientCells = $("#fax-log-table").find("td").filter(function() {
+				return $(this).data("fax-attribute") === "recipients"
+			})
+			recipientCells.each(function() {
+				var recipientCountStr = $(this).text()
+				if (recipientCountStr === '-') {
+					return
+				}
+
+				recipientCount = parseInt(recipientCountStr)
+				recipientsDataLink = $("<a href='#'>" + recipientCount + "</a>")
+				recipientsDataLink.on("click", phaxMachine.faxLogs.displayRecipientsDataModal)
+				$(this).html(recipientsDataLink)
+			})
+		},
+
+		displayRecipientsDataModal: function() {
+			var tableRow = $(this).closest("tr")
+			var recipientsData = tableRow.data("recipients")
+			var modal = $("#recipientsDataModal")
+			var recipientAttributes = [
+				"bitrate", "completed_at", "number", "resolution", "status"
+			]
+			var recipientsTable = $("#recipientsDataTable")
+
+			recipientsTable.find("tbody").find("tr").remove()
+
+			recipientsData.forEach(function(recipientData) {
+				var recipientRow = $("<tr></tr>")
+				var recipientData = phaxMachine.faxLogs.processRecipientData(recipientData)
+
+				recipientAttributes.forEach(function(recipientAttribute) {
+					var cell = $("<td>" + recipientData[recipientAttribute] + "</td>")
+					recipientRow.append(cell)
+				})
+
+				recipientsTable.find("tbody").append(recipientRow)
+				console.log(recipientRow)
+				console.log(recipientsTable)
+			})
+			modal.modal("show")
+		},
+
+		processRecipientData: function(recipientData) {
 			return {
+				"bitrate": recipientData.bitrate,
+				"completed_at": phaxMachine.faxLogs.formatTimestamp(recipientData.completed_at),
+				"number": recipientData.number,
+				"resolution": recipientData.resolution,
+				"status": phaxMachine.faxLogs.formatStatus(recipientData.status)
+			}
+		},
+
+		processFaxData: function(faxData) {
+			processedFaxData = {
 				"id": faxData.id,
 				"num_pages": faxData.num_pages,
 				"cost": phaxMachine.faxLogs.formatMoney(faxData.cost),
 				"direction": phaxMachine.faxLogs.capitalize(faxData.direction),
 				"status": phaxMachine.faxLogs.formatStatus(faxData.status),
 				"type": phaxMachine.faxLogs.formatType(faxData.is_test),
-				"requested_at": phaxMachine.faxLogs.formatTimestamp(faxData.requested_at),
-				"recipients": ""
+				"requested_at": phaxMachine.faxLogs.formatTimestamp(faxData.requested_at)
 			}
+
+			if (faxData.direction === 'sent') {
+				processedFaxData.recipients = faxData.recipients.length
+				processedFaxData.recipientsData = faxData.recipients
+			}
+			else {
+				processedFaxData.recipients = '-'
+			}
+
+			return processedFaxData
 		},
 
 		formatMoney: function(valueInCents) {
