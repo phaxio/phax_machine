@@ -98,21 +98,14 @@ class Application < Sinatra::Application
 
     Pony.mail(
       to: email_address,
-      from: 'prod@phaxio.com',
+      from: smtp_from_address,
       subject: email_subject,
       html_body: erb(:fax_email, layout: false),
       attachments: {
         fax_file_name => fax_file_contents
       },
       via: :smtp,
-      via_options: {
-        :address                => ENV['SMTP_HOST'],
-        :port                   => (ENV['SMTP_PORT'] || 25),
-        :enable_starttls_auto   => ENV['SMTP_TLS'],
-        :user_name              => ENV['SMTP_USER'],
-        :password               => ENV['SMTP_PASSWORD'],
-        :authentication         => :login
-      }
+      via_options: smtp_options
     )
   end
 
@@ -150,20 +143,27 @@ class Application < Sinatra::Application
 
           Pony.mail(
             :to => fromEmail,
-            :from => (ENV['SMTP_FROM'] || 'mailphax@example.com'),
+            :from => smtp_from_address,
             :subject => 'Mailfax: There was a problem sending your fax',
             :body => "There was a problem faxing your #{filenames.length} files to #{number}: " + result['message'],
             :via => :smtp,
-            :via_options => {
-              :address                => ENV['SMTP_HOST'],
-              :port                   => (ENV['SMTP_PORT'] || 25),
-              :enable_starttls_auto   => ENV['SMTP_TLS'],
-              :user_name              => ENV['SMTP_USER'],
-              :password               => ENV['SMTP_PASSWORD'],
-              :authentication         => :login
-            }
-          )
+            :via_options => smtp_options
         end
       end
+    end
+
+    def smtp_options
+      {
+        :address                => ENV['SMTP_HOST'],
+        :port                   => (ENV['SMTP_PORT'] || 25),
+        :enable_starttls_auto   => ENV['SMTP_TLS'],
+        :user_name              => ENV['SMTP_USER'],
+        :password               => ENV['SMTP_PASSWORD'],
+        :authentication         => :login
+      }
+    end
+
+    def smtp_from_address
+      ENV['SMTP_FROM'] || 'phaxmachine@phaxio.com'
     end
 end
