@@ -23,7 +23,7 @@
 
 1. Sign up for a [Mailgun](https://www.mailgun.com) account.
 2. In the Mailgun console, choose the "Domains" tab, then click the "Add New Domain" button, and enter the subdomain where you want to receive fax emails. (In these examples, I'm using `phaxmail.myapp.com`)
-![Mailgun Domains Tab Screenshot](https://github.com/phaxio/phax_machine/raw/master/readme_assets/mailgun_domain_tabs.png)
+![Mailgun Domains Tab Screenshot](https://github.com/phaxio/phax_machine/raw/master/readme_assets/mailgun_domain_tab.png)
 ![Mailgun Add Domain Button Screenshot](https://github.com/phaxio/phax_machine/raw/master/readme_assets/mailgun_add_domain.png)
 ![Mailgun Add Domain Form Screenshot](https://github.com/phaxio/phax_machine/raw/master/readme_assets/mailgun_add_domain_form.png)
 3. Verify your domain. Mailgun will provide you with straight-forward guides on how to do this with most common providers. This step may take some time.
