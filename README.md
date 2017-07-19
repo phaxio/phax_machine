@@ -8,6 +8,8 @@
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
+If you'll be using Mailgun for the transactional email part of PhaxMachine, you can leave all of the SMTP fields blank. 
+
 #### Or manually:
 
 1. Install and configure the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli).
@@ -22,7 +24,7 @@
 ### 2. Configure Mailgun
 
 1. Sign up for a [Mailgun](https://www.mailgun.com) account.
-2. In the Mailgun console, choose the "Domains" tab, then click the "Add New Domain" button, and enter the subdomain where you want to receive fax emails. (In these examples, I'm using `phaxmail.myapp.com`)
+2. In the Mailgun console, choose the "Domains" tab, then click the "Add New Domain" button, and enter the subdomain where you want to receive fax emails. In these examples, I'm using `phaxmail.myapp.com`. If you don't want to configure your own domain, you can use the sandbox domain already in your Mailgun account and skip to step 4 below. 
 ![Mailgun Domains Tab Screenshot](https://github.com/phaxio/phax_machine/raw/master/readme_assets/mailgun_domains_tab.png)
 ![Mailgun Add Domain Button Screenshot](https://github.com/phaxio/phax_machine/raw/master/readme_assets/mailgun_add_domain.png)
 ![Mailgun Add Domain Form Screenshot](https://github.com/phaxio/phax_machine/raw/master/readme_assets/mailgun_add_domain_form.png)
@@ -31,7 +33,7 @@
 3. Once your domain has been verified, choose the "Routes" tab, then click the "Create a Route" button
 ![Mailgun Routes Tab Screenshot](https://github.com/phaxio/phax_machine/raw/master/readme_assets/mailgun_routes_tab.png)
 ![Mailgun Create Route Button Screenshot](https://github.com/phaxio/phax_machine/raw/master/readme_assets/mailgun_route_add_button.png)
-4. On the "Create New Route" page, choose "Match Recipient" for the Expression Type, and enter the following pattern (substituting the domain you previously configured): `[0-9]+@phaxmail.myapp.com`. Then, under "Actions", tick the "Forward" box and enter the URL for your instance of PhaxMachine, followed by `/mailgun`. The other fields should be left alone, and once you're finished go ahead and click the "Create Route" button.
+4. On the "Create New Route" page, choose "Match Recipient" for the Expression Type, and enter the following pattern (substituting the domain you previously configured): `[0-9]+@phaxmail.myapp.com`. Then, under "Actions", tick the "Forward" box and enter the URL for your instance of PhaxMachine, followed by `/mailgun` (e.g. If you're using a quick and dirty Heroku installation, this url might look something like https://WHATYOUNAMEDYOURAPP.herokuapp.com/mailgun.) The other fields should be left alone, and once you're finished click the "Create Route" button.
 ![Mailgun New Route Page Screenshot 1](https://github.com/phaxio/phax_machine/raw/master/readme_assets/mailgun_new_route_1.png)
 ![Mailgun New Route Page Screenshot 2](https://github.com/phaxio/phax_machine/raw/master/readme_assets/mailgun_new_route_2.png)
 5. (Optional) Test that everything is working correctly by sending an email with an attachment in the following format: `15551231234@phaxmail.myapp.com` (substituting the phone number and domain). **Phone Numbers should not contain any special characters.** If everything is set up correctly, you should have just sent a fax.
