@@ -29,6 +29,11 @@ var phaxMachine = {
 				faxData = phaxMachine.faxLogs.processFaxData(faxData)
 
 				var tableRow = $("<tr></tr>")
+
+				var faxFileCell = $('<a class="download-fax-file" href=""></a>')
+				faxFileCell.html($('<img src="/file-icon.png">'))
+				tableRow.append(faxFileCell)
+
 				logAttributes.forEach(function(logAttribute) {
 					var cell = $("<td></td>")
 					cell.data("fax-attribute", logAttribute)
