@@ -148,6 +148,7 @@ class Application < Sinatra::Application
             :body => "There was a problem faxing your #{filenames.length} files to #{number}: " + result['message'],
             :via => :smtp,
             :via_options => smtp_options
+          )
         end
       end
     end
