@@ -62,9 +62,16 @@ var phaxMachine = {
 			})
 		},
 
-		downloadFaxFile: function() {
+		downloadFaxFile: function(e) {
+			// I promise to clean this up later --Julien
 			var faxId = $($(this).closest('tr').find('td').filter(function() { return $(this).data('fax-attribute') == 'id' })[0]).text()
-			console.log(faxId)
+
+			$.ajax('/download_file', {
+				type: 'GET',
+				data: {fax_id: faxId}
+			})
+
+			e.preventDefault()
 		},
 
 		displayRecipientsDataModal: function() {

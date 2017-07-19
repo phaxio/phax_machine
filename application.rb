@@ -109,6 +109,10 @@ class Application < Sinatra::Application
     )
   end
 
+  get '/download_file' do
+    puts params
+  end
+
   private
 
     def set_phaxio_creds
