@@ -30,8 +30,7 @@ var phaxMachine = {
 
 				var tableRow = $("<tr></tr>")
 
-				var faxFileCell = $('<a class="download-fax-file" href=""></a>')
-				faxFileCell.html($('<img src="/file-icon.png">'))
+				var faxFileCell = $('<td><a class="download-fax-file" href="#"><img src="/file-icon.png" style="height: 20px; width: 20px"></a></td>')
 				tableRow.append(faxFileCell)
 
 				logAttributes.forEach(function(logAttribute) {
