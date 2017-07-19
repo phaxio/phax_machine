@@ -91,8 +91,8 @@ class Application < Sinatra::Application
 
     @fax = JSON.parse params['fax']
     fax_from = @fax['from_number']
-    fax_file_name = params['file']['filename']
-    fax_file_contents = params['file']['tempfile'].read
+    fax_file_name = params['filename']['filename']
+    fax_file_contents = params['filename']['tempfile'].read
     email_address = ENV['RECEIVED_FAX_EMAIL']
     email_subject = "Fax received from #{fax_from}"
 
