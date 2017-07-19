@@ -3,6 +3,7 @@ require 'phaxio'
 require 'mail'
 require 'pony'
 require 'json'
+require 'tempfile'
 
 if not ENV['PHAXIO_API_KEY'] or not ENV['PHAXIO_API_SECRET']
   raise "You must specify your phaxio API keys in PHAXIO_API_KEY and PHAXIO_API_SECRET"
@@ -110,7 +111,17 @@ class Application < Sinatra::Application
   end
 
   get '/download_file' do
-    puts params
+    set_phaxio_creds
+
+    fax_id = params["fax_id"].to_i
+    pdf = Phaxio.get_fax_file(id: fax_id, type: "p")
+    tempfile = Tempfile.new ['fax', '.pdf']
+    begin
+      tempfile << pdf
+      send_file tempfile.path, disposition: :attachment
+    ensure
+      tempfile.unlink
+    end
   end
 
   private
