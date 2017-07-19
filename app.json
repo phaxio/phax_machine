@@ -17,6 +17,10 @@
     "PHAXIO_API_SECRET": {
       "description": "Your Phaxio API Secret"
     },
+    "RECEIVED_FAX_EMAIL": {
+      "description": "The email address where you want to receive faxes",
+      "required": false
+    },
     "SMTP_HOST": {
       "description": "SMTP host for outgoing email (for failure alerts)",
       "required": false

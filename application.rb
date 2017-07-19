@@ -2,6 +2,7 @@ require 'sinatra/base'
 require 'phaxio'
 require 'mail'
 require 'pony'
+require 'json'
 
 if not ENV['PHAXIO_API_KEY'] or not ENV['PHAXIO_API_SECRET']
   raise "You must specify your phaxio API keys in PHAXIO_API_KEY and PHAXIO_API_SECRET"
@@ -81,6 +82,29 @@ class Application < Sinatra::Application
 
   get '/sendgrid' do
     [501, "sendgrid not implemented yet"]
+  end
+
+  post '/fax_received' do
+    if not ENV['RECEIVED_FAX_EMAIL']
+      raise 'RECEIVED_FAX_EMAIL must be set for fax-to-mail functionality'
+    end
+
+    @fax = JSON.parse params['fax']
+    fax_from = @fax['from_number']
+    fax_file_name = params['file']['filename']
+    fax_file_contents = params['file']['tempfile'].read
+    email_address = ENV['RECEIVED_FAX_EMAIL']
+    email_subject = "Fax received from #{fax_from}"
+
+    Pony.mail(
+      to: email_address,
+      from: 'prod@phaxio.com',
+      subject: email_subject,
+      html_body: erb(:fax_email, layout: false),
+      attachments: {
+        fax_file_name => fax_file_contents
+      }
+    )
   end
 
   private
