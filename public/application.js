@@ -31,6 +31,7 @@ var phaxMachine = {
 				var tableRow = $("<tr></tr>")
 
 				var faxFileCell = $('<td><a class="download-fax-file" href="#"><img src="/file-icon.png" style="height: 20px; width: 20px"></a></td>')
+				faxFileCell.on('click', phaxMachine.faxLogs.downloadFaxFile)
 				tableRow.append(faxFileCell)
 
 				logAttributes.forEach(function(logAttribute) {
@@ -59,6 +60,11 @@ var phaxMachine = {
 				recipientsDataLink.on("click", phaxMachine.faxLogs.displayRecipientsDataModal)
 				$(this).html(recipientsDataLink)
 			})
+		},
+
+		downloadFaxFile: function() {
+			var faxId = $($(this).closest('tr').find('td').filter(function() { return $(this).data('fax-attribute') == 'id' })[0]).text()
+			console.log(faxId)
 		},
 
 		displayRecipientsDataModal: function() {
