@@ -30,13 +30,19 @@ var phaxMachine = {
 
 				var tableRow = $("<tr></tr>")
 
-				var faxFileCell = $(
-					'<td>'
-					+ '<a href="/download_file?fax_id=' + faxData['id'] + '">'
-					+ '<img src="/file-icon.png" style="height: 20px; width: 20px">'
-					+ '</a>'
-					+ '</td>'
-				)
+				var faxFileCell
+				if (faxData.num_pages > 0) {
+					faxFileCell = $(
+						'<td>'
+						+ '<a href="/download_file?fax_id=' + faxData.id + '">'
+						+ '<img src="/file-icon.png" style="height: 20px; width: 20px">'
+						+ '</a>'
+						+ '</td>'
+					)
+				}
+				else {
+					faxFileCell = $('<td>-</td>')
+				}
 
 				tableRow.append(faxFileCell)
 
