@@ -103,6 +103,15 @@ class Application < Sinatra::Application
       html_body: erb(:fax_email, layout: false),
       attachments: {
         fax_file_name => fax_file_contents
+      },
+      via: :smtp,
+      via_options: {
+        :address                => ENV['SMTP_HOST'],
+        :port                   => (ENV['SMTP_PORT'] || 25),
+        :enable_starttls_auto   => ENV['SMTP_TLS'],
+        :user_name              => ENV['SMTP_USER'],
+        :password               => ENV['SMTP_PASSWORD'],
+        :authentication         => :login
       }
     )
   end
