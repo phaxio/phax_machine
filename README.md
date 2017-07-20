@@ -6,7 +6,7 @@
 
 #### The easy way (click this button):
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/phaxio/phax_machine)
 
 You'll notice a number of fields that need to be populated (e.g. App Name and the Config Variables). Choose an App name, and populate the API credentials fields with your production [API credentials from Phaxio](https://console.phaxio.com/apiSettings).
 
