@@ -118,6 +118,7 @@ class Application < Sinatra::Application
     tempfile = Tempfile.new ['fax', '.pdf']
     tempfile.binmode
     tempfile.write pdf
+    logger.warn "Sending file with length #{File.size(tempfile.path)}"
     send_file tempfile.path, disposition: :attachment
   end
 
