@@ -114,10 +114,9 @@ class Application < Sinatra::Application
     set_phaxio_creds
 
     fax_id = params["fax_id"].to_i
-    pdf = Phaxio.get_fax_file(id: fax_id, type: "p")
-    tempfile = Tempfile.new ['fax', '.pdf']
-    tempfile.binmode
-    tempfile.write pdf
+    api_response = Phaxio.get_fax_file(id: fax_id, type: "p")
+    tempfile = Tempfile.new(['fax', '.pdf'])
+    IO.binwrite tempfile.path, api_response.body
     logger.warn "Sending file with length #{File.size(tempfile.path)}"
     send_file tempfile.path, disposition: :attachment
   end
