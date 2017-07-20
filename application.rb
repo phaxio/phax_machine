@@ -116,7 +116,8 @@ class Application < Sinatra::Application
     fax_id = params["fax_id"].to_i
     pdf = Phaxio.get_fax_file(id: fax_id, type: "p")
     tempfile = Tempfile.new ['fax', '.pdf']
-    tempfile.write(pdf)
+    tempfile.binmode
+    tempfile.write pdf
     send_file tempfile.path, disposition: :attachment
   end
 
