@@ -1,8 +1,3 @@
-<!--
-	TODO:
-	- Hide progress on completion
-	- Disable button while request pending
--->
 <main id="sendFax">
 	<h1>Send a Fax</h1>
 
@@ -13,8 +8,11 @@
 		</div>
 
 		<div class="form-group">
-			<label for="file">File</label>
-			<input id="file" name="file" type="file" required>
+			<label>File</label>
+			<div class="file-drop" data-target="#faxFile">
+				<h3>Drag a file onto this box to upload it.</h3>
+				<input id="faxFile" name="file" type="file" required>
+			</div>
 
 			<div id="faxFileProgress" hidden="hidden"></div>
 		</div>
