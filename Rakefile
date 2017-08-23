@@ -28,6 +28,11 @@ namespace :db do
   task :migrate do
     migration_file_paths = Dir[File.join(MIGRATIONS_PATH, "*.rb")].sort
 
+    unless DB.table_exists?(:schema_migrations)
+      DB.create_table(:schema_migrations) { String :version }
+      DB[:schema_migrations].insert(version: nil)
+    end
+
     current_schema_version = DB[:schema_migrations].first[:version]
     if !current_schema_version.nil?
       path = ""
@@ -62,10 +67,14 @@ namespace :db do
   task :create do
     db_name = ENV.fetch "DATABASE_NAME", "phax_machine"
     Sequel.connect(adapter: "postgres", database: "postgres", user: ENV["DATABASE_USER"], password: ENV["DATABASE_PASSWORD"]) do |db|
-      db.execute "DROP DATABASE IF EXISTS #{db_name}"
       db.execute "CREATE DATABASE #{db_name}"
     end
-    DB.create_table(:schema_migrations) { String :version }
-    DB[:schema_migrations].insert(version: nil)
+  end
+
+  task :drop do
+    db_name = ENV.fetch "DATABASE_NAME", "phax_machine"
+    Sequel.connect(adapter: "postgres", database: "postgres", user: ENV["DATABASE_USER"], password: ENV["DATABASE_PASSWORD"]) do |db|
+      db.execute "DROP DATABASE IF EXISTS #{db_name}"
+    end
   end
 end
