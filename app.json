@@ -17,10 +17,6 @@
     "PHAXIO_API_SECRET": {
       "description": "Your Phaxio API Secret"
     },
-    "RECEIVED_FAX_EMAIL": {
-      "description": "The email address where you want to receive faxes",
-      "required": false
-    },
     "SMTP_HOST": {
       "description": "SMTP host for outgoing email (for failure alerts)",
       "required": false
@@ -46,6 +42,9 @@
       "required": false
     }
   },
-  "repository" : "https://github.com/phaxio/phax_machine",
-  "logo" : "https://avatars3.githubusercontent.com/u/929026?v=2&s=200"
+  "repository": "https://github.com/phaxio/phax_machine",
+  "logo": "https://avatars3.githubusercontent.com/u/929026?v=2&s=200",
+  "scripts": {
+    "postdeploy": "rails db:migrate"
+  }
 }

@@ -1,0 +1,25 @@
+<%= form_for user do |f| %>
+  <% if user.errors.any? %>
+    <div class="text-danger">
+      The following errors occurred when saving the user:
+
+      <ul>
+        <% user.errors.full_messages.each do |error_message| %>
+          <li><%= error_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :email %>
+    <%= f.email_field :email, required: true, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :fax_number, 'Fax Number' %>
+    <%= f.phone_field :fax_number, required: true, class: 'form-control' %>
+  </div>
+
+  <%= f.submit 'Submit', class: 'btn btn-primary' %>
+<% end %>

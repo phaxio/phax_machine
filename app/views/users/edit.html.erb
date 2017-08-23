@@ -1,0 +1,7 @@
+<h1 class="page_title">Edit User</h1>
+
+<%= render partial: 'form', locals: {user: @user} %>
+
+<div class="user_actions">
+  <%= link_to 'Delete', user_path(@user), method: 'delete', data: {confirm: 'Are you sure?'}, class: 'btn btn-danger' %>
+</div>

@@ -4,12 +4,18 @@ require 'mail'
 require 'pony'
 require 'json'
 require 'tempfile'
+require 'sequel'
+
+if ENV['RACK_ENV'] == 'development'
+  require 'dotenv'
+  Dotenv.load
+end
 
 if not ENV['PHAXIO_API_KEY'] or not ENV['PHAXIO_API_SECRET']
   raise "You must specify your phaxio API keys in PHAXIO_API_KEY and PHAXIO_API_SECRET"
 end
 
-class Application < Sinatra::Application
+class PhaxMachineSinatra < Sinatra::Application
   # Display faxes within the past 12 hours
   get '/' do
     erb :logs
@@ -68,9 +74,8 @@ class Application < Sinatra::Application
       #add the file to the hash
       outputFile = "/tmp/#{Time.now.to_i}-#{rand(200)}-" + params["attachment-#{i}"][:filename]
 
-      File.open(outputFile, "w") do |f|
-        f.write(params["attachment-#{i}"][:tempfile].read)
-      end
+      file_data = File.binread(params["attachment-#{i}"][:tempfile].path)
+      IO.binwrite(outputFile, file_data)
 
       files.push(outputFile)
 
@@ -86,15 +91,14 @@ class Application < Sinatra::Application
   end
 
   post '/fax_received' do
-    if not ENV['RECEIVED_FAX_EMAIL']
-      raise 'RECEIVED_FAX_EMAIL must be set for fax-to-mail functionality'
-    end
-
     @fax = JSON.parse params['fax']
+
+    recipient_number = Phonelib.parse(@fax['to_number']).e164
+    email_address = db[:users].where(fax_number: recipient_number).first[:email]
+
     fax_from = @fax['from_number']
     fax_file_name = params['filename']['filename']
     fax_file_contents = params['filename']['tempfile'].read
-    email_address = ENV['RECEIVED_FAX_EMAIL']
     email_subject = "Fax received from #{fax_from}"
 
     Pony.mail(
@@ -133,9 +137,11 @@ class Application < Sinatra::Application
     def sendFax(fromEmail, toEmail, filenames)
       set_phaxio_creds
 
+      from_fax_number = db[:users].where(email: fromEmail).first[:fax_number]
+
       number = Mail::Address.new(toEmail).local
 
-      options = {to: number, callback_url: "mailto:#{fromEmail}" }
+      options = {to: number, callback_url: "mailto:#{fromEmail}", caller_id: from_fax_number, :"tag[user]" => fromEmail}
 
       filenames.each_index do |idx|
         options["filename[#{idx}]"] = File.new(filenames[idx])
@@ -178,5 +184,9 @@ class Application < Sinatra::Application
 
     def smtp_from_address
       ENV['SMTP_FROM'] || 'phaxmachine@phaxio.com'
+    end
+
+    def db
+      @db ||= Sequel.connect(ENV["DATABASE_URL"])
     end
 end

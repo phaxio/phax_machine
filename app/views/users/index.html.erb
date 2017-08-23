@@ -1,0 +1,20 @@
+<h1 class="page_title">Manage Users</h1>
+
+<%= link_to "Add User", new_user_path, class: "btn btn-primary" %>
+
+<table class="table users-table">
+  <thead>
+    <th>Edit</th>
+    <th>Email</th>
+    <th>Fax Number</th>
+  </thead>
+  <tbody>
+    <% @users.each do |user| %>
+      <tr data-user-id="<%= user.id %>">
+        <td><%= link_to "Edit", edit_user_path(user) %></td>
+        <td><%= user.email %></td>
+        <td><%= user.fax_number %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
