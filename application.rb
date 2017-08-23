@@ -1,9 +1,4 @@
-require 'sinatra/base'
-require 'phaxio'
-require 'mail'
-require 'pony'
-require 'json'
-require 'tempfile'
+require './environment'
 
 if not ENV['PHAXIO_API_KEY'] or not ENV['PHAXIO_API_SECRET']
   raise "You must specify your phaxio API keys in PHAXIO_API_KEY and PHAXIO_API_SECRET"
