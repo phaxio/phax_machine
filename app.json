@@ -51,6 +51,6 @@
   "repository": "https://github.com/phaxio/phax_machine",
   "logo": "https://avatars3.githubusercontent.com/u/929026?v=2&s=200",
   "scripts": {
-    "postdeploy": "bundle exec rake db:create && bundle exec rake db:migrate"
+    "postdeploy": "bundle exec rake db:migrate"
   }
 }
