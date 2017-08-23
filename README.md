@@ -6,13 +6,13 @@
 
 #### The easy way (click this button):
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/phaxio/phax_machine)
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/phaxio/phax_machine/tree/implement-multi-user-faxing)
 
 You'll notice a number of fields that need to be populated (e.g. App Name and the Config Variables). Choose an App name, and populate the API credentials fields with your production [API credentials from Phaxio](https://console.phaxio.com/apiSettings).
 
 Enter the email address that you'd like your received faxes sent to in the *Received_Fax_Email* field.
 
-Skip to section 2 below. 
+Skip to section 2 below.
 
 #### Or manually:
 
@@ -28,17 +28,17 @@ Skip to section 2 below.
 ### 2. Configure Mailgun (we'll come back to the fields on Heroku soon):
 
 1. Sign up for a [Mailgun](https://www.mailgun.com) account.
-2. In the Mailgun console, choose the "Domains" tab, then click the "Add New Domain" button, and enter the subdomain where you want to receive fax emails. In these examples, I'm using `phaxmail.myapp.com`. If you don't want to configure your own domain, you can use the sandbox domain already in your Mailgun account and skip to step 4 below. 
+2. In the Mailgun console, choose the "Domains" tab, then click the "Add New Domain" button, and enter the subdomain where you want to receive fax emails. In these examples, I'm using `phaxmail.myapp.com`. If you don't want to configure your own domain, you can use the sandbox domain already in your Mailgun account and skip to step 4 below.
 ![Mailgun Domains Tab Screenshot](https://github.com/phaxio/phax_machine/raw/master/readme_assets/mailgun_domains_tab.png)
 ![Mailgun Add Domain Button Screenshot](https://github.com/phaxio/phax_machine/raw/master/readme_assets/mailgun_add_domain.png)
 ![Mailgun Add Domain Form Screenshot](https://github.com/phaxio/phax_machine/raw/master/readme_assets/mailgun_add_domain_form.png)
 3. Verify your domain. Mailgun will provide you with straight-forward guides on how to do this with most common providers. This step may take some time.
 ![Mailgun Verify Domain Page Screenshot](https://github.com/phaxio/phax_machine/raw/master/readme_assets/mailgun_domain_verification.png)
 4. On the [domains page](https://app.mailgun.com/app/domains), select the domain that you'll be using. (This can be the sandbox domain in your account which ends mailgun.org.)
-5. In the Domain Information section, copy and paste the SMTP Hostname into the SMTP_HOST field on Heroku. 
-6. Next copy and past the Default SMTP Login from Mailgun into the SMTP_USER field on Heroku. 
+5. In the Domain Information section, copy and paste the SMTP Hostname into the SMTP_HOST field on Heroku.
+6. Next copy and past the Default SMTP Login from Mailgun into the SMTP_USER field on Heroku.
 7. Copy and paste the Default Password from Mailgun into the SMTP_PASSWORD field on Heroku.
-8. Use port 587 as the SMTP port, mark SMTP_TLS as true, and enter the email address you'd like the emails to come from in the SMTP_FROM field. 
+8. Use port 587 as the SMTP port, mark SMTP_TLS as true, and enter the email address you'd like the emails to come from in the SMTP_FROM field.
 9. Click Deploy!
 10. Once your domain at Mailgun has been verified, choose the "Routes" tab, then click the "Create a Route" button
 ![Mailgun Routes Tab Screenshot](https://github.com/phaxio/phax_machine/raw/master/readme_assets/mailgun_routes_tab.png)
@@ -54,4 +54,4 @@ Skip to section 2 below.
 1. Head to the [Callback URL's page in Phaxio](https://console.phaxio.com/apiSettings/callbacks).
 2. In the second field which says "POST (or send email) to the above URL when a fax has been received," enter your application url followed by '/fax_received' (e.g. If you're using a quick and dirty Heroku installation, this url might look something like https://WHATYOUNAMEDYOURAPP.herokuapp.com/fax_received. *Note:* if you're using the quick and dirty setup, your faxing emails might be in your spam folder! )
 
-3. (Optional) Test the everything is working correctly by sending a fax to your Phaxio number and and seeing if it shows up in your email inbox! Note: make sure to check your spam folder! 
+3. (Optional) Test the everything is working correctly by sending a fax to your Phaxio number and and seeing if it shows up in your email inbox! Note: make sure to check your spam folder!
