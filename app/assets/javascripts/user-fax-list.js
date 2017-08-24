@@ -1,7 +1,8 @@
 function formatMoney(valueInCents) {
   var valueString = String(valueInCents);
-  while (valueString.length < 3)
+  while (valueString.length < 3) {
     valueString = "0" + valueString;
+  }
   var valueChars = valueString.split("");
   valueChars.splice(-2, 0, ".");
   return "$" + valueChars.join("");
@@ -66,7 +67,8 @@ document.addEventListener('DOMContentLoaded', function() {
             failure:        ['Failure',         'danger' ]
           };
 
-          var [statusText, statusClass] = statusMap[fax.status];
+          var statusText = statusMap[fax.status][0];
+          var statusClass = statusMap[fax.status][1];
 
           return "<span class='text-" + statusClass + "'>" + statusText + "</span>";
         },
