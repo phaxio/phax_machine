@@ -12,7 +12,7 @@
     <% @users.each do |user| %>
       <tr data-user-id="<%= user.id %>">
         <td><%= link_to "Edit", edit_user_path(user) %></td>
-        <td><%= link_to user.email, user_path(user) %><td>
+        <td><%= link_to user.email, user_path(user) %></td>
         <td><%= user.fax_number %></td>
       </tr>
     <% end %>
