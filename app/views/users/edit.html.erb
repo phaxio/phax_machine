@@ -2,6 +2,6 @@
 
 <%= render partial: 'form', locals: {user: @user} %>
 
-<div class="user_actions">
-  <%= link_to 'Delete', user_path(@user), method: 'delete', data: {confirm: 'Are you sure?'}, class: 'btn btn-danger' %>
-</div>
+<br>
+
+<%= link_to 'Delete', user_path(@user), method: 'delete', data: {confirm: 'Are you sure?'}, class: 'btn btn-danger' %>
