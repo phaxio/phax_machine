@@ -141,7 +141,7 @@ class PhaxMachineSinatra < Sinatra::Application
 
       number = Mail::Address.new(toEmail).local
 
-      options = {to: number, callback_url: "mailto:#{fromEmail}", caller_id: from_fax_number, :"tag[user]" => fromEmail}
+      options = {to: number, caller_id: from_fax_number, :"tag[user]" => fromEmail}
 
       filenames.each_index do |idx|
         options["filename[#{idx}]"] = File.new(filenames[idx])

@@ -18,6 +18,10 @@
 
   <div class="form-group">
     <%= f.label :fax_number, 'Fax Number' %>
+    <small class="text-muted">
+      The fax number in your Phaxio account to be used by this user for sending and receiving faxes.
+      Should be in e164 format (i.e. +15558675309).
+    </small>
     <%= f.phone_field :fax_number, required: true, class: 'form-control' %>
   </div>
 
