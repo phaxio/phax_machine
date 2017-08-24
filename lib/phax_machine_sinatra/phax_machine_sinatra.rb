@@ -11,10 +11,6 @@ if ENV['RACK_ENV'] == 'development'
   Dotenv.load
 end
 
-if not ENV['PHAXIO_API_KEY'] or not ENV['PHAXIO_API_SECRET']
-  raise "You must specify your phaxio API keys in PHAXIO_API_KEY and PHAXIO_API_SECRET"
-end
-
 class PhaxMachineSinatra < Sinatra::Application
   # Display faxes within the past 12 hours
   get '/' do

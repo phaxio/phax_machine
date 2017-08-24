@@ -16,6 +16,69 @@ RSpec.describe UsersController, type: :controller do
     end
   end
 
+  describe 'viewing a user' do
+    let(:user) { create :user }
+    let(:action) { get :show, params: params, format: expected_format }
+
+    describe 'visiting the show user page' do
+      let(:expected_format) { 'html' }
+      let(:params) { {id: user} }
+
+      it 'renders the user show page' do
+        action
+        expect(response).to be_ok
+        assert_select '.page_title', text: "Viewing #{user.email}"
+      end
+    end
+
+    describe 'getting user data' do
+      let(:expected_format) { 'json' }
+
+      describe 'by default' do
+        let(:params) { {id: user} }
+
+        it 'returns the user data retrieved from phaxio' do
+          expect(Phaxio).to receive(:list_faxes).with('tag[user]' => user.email) do
+            {
+              'success' => true,
+              'message' => 'Retrieved faxes successfully'
+            }
+          end
+
+          action
+          expect(response).to be_ok
+          response_data = JSON.parse(response.body)
+          expect(response_data['success']).to eq(true)
+          expect(response_data['message']).to eq('Retrieved faxes successfully')
+        end
+      end
+
+      describe 'with a custom date range' do
+        let(:start_time) { 1.week.ago.to_i }
+        let(:end_time) { DateTime.current.to_i }
+
+        let(:params) { {id: user, start: start_time, end: end_time} }
+
+        it 'allows specifying a custom date range' do
+          expected_options = {
+            'tag[user]' => user.email,
+            start: start_time,
+            end: end_time
+          }
+          expect(Phaxio).to receive(:list_faxes).with(expected_options) do
+            {
+              'success' => true,
+              'message' => 'Retrieved faxes successfully'
+            }
+          end
+
+          action
+          expect(response).to be_ok
+        end
+      end
+    end
+  end
+
   describe 'visiting the add user page' do
     let(:action) { get :new }
 
