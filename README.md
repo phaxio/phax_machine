@@ -10,8 +10,6 @@
 
 You'll notice a number of fields that need to be populated (e.g. App Name and the Config Variables). Choose an App name, and populate the API credentials fields with your production [API credentials from Phaxio](https://console.phaxio.com/apiSettings).
 
-Enter the email address that you'd like your received faxes sent to in the *Received_Fax_Email* field.
-
 Skip to section 2 below.
 
 #### Or manually:
