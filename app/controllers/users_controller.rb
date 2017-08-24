@@ -57,7 +57,7 @@ class UsersController < ApplicationController
     end
 
     def search_params
-      search_params = { 'tag[user]' => @user.email }
+      search_params = { number: @user.fax_number }
       search_params[:start] = params[:start].to_i if params[:start]
       search_params[:end] = params[:end].to_i if params[:end]
       search_params

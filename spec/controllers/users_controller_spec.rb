@@ -38,7 +38,7 @@ RSpec.describe UsersController, type: :controller do
         let(:params) { {id: user} }
 
         it 'returns the user data retrieved from phaxio' do
-          expect(Phaxio).to receive(:list_faxes).with('tag[user]' => user.email) do
+          expect(Phaxio).to receive(:list_faxes).with(number: user.fax_number) do
             {
               'success' => true,
               'message' => 'Retrieved faxes successfully'
@@ -61,7 +61,7 @@ RSpec.describe UsersController, type: :controller do
 
         it 'allows specifying a custom date range' do
           expected_options = {
-            'tag[user]' => user.email,
+            number: user.fax_number,
             start: start_time,
             end: end_time
           }
