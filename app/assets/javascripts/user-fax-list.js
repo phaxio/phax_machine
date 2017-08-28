@@ -1,18 +1,20 @@
-function formatMoney(valueInCents) {
-  var valueString = String(valueInCents);
-  while (valueString.length < 3) {
-    valueString = "0" + valueString;
-  }
-  var valueChars = valueString.split("");
-  valueChars.splice(-2, 0, ".");
-  return "$" + valueChars.join("");
-}
+var Utils = {
+  formatMoney: function(valueInCents) {
+    var valueString = String(valueInCents);
+    while (valueString.length < 3) {
+      valueString = "0" + valueString;
+    }
+    var valueChars = valueString.split("");
+    valueChars.splice(-2, 0, ".");
+    return "$" + valueChars.join("");
+  },
 
-function capitalize(string) {
-  chars = string.split('');
-  chars[0] = chars[0].toUpperCase();
-  return chars.join('');
-}
+  capitalize: function(string) {
+    chars = string.split('');
+    chars[0] = chars[0].toUpperCase();
+    return chars.join('');
+  }
+};
 
 document.addEventListener('DOMContentLoaded', function() {
   function getUserFaxes() {
@@ -48,10 +50,10 @@ document.addEventListener('DOMContentLoaded', function() {
       },
       methods: {
         faxCost: function(fax) {
-          return formatMoney(fax.cost);
+          return Utils.formatMoney(fax.cost);
         },
         faxDirection: function(fax) {
-          return capitalize(fax.direction);
+          return Utils.capitalize(fax.direction);
         },
         faxStatus: function(fax) {
          var statusMap = {
