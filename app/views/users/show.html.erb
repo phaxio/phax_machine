@@ -3,8 +3,8 @@
 <h1 class="page_title">Viewing <%= @user.email %></h1>
 
 <div id="userFaxList" data-user-id="<%= @user.id %>">
-  <div>Total Sent: {{ totalSent }}</div>
-  <div>Total Received: {{ totalReceived }}</div>
+  <div>Total sent in the past week: {{ totalSent }}</div>
+  <div>Total received in the past week: {{ totalReceived }}</div>
   <table class="table">
     <thead>
       <th>ID</th>
