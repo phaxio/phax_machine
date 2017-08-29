@@ -13,4 +13,7 @@
 //= require jquery
 //= require bootstrap-sprockets
 //= require rails-ujs
-//= require_tree .
+//= require phax-machine
+//= require utils
+//= require_tree ./pages
+//= require ./init
