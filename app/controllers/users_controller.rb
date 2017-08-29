@@ -15,7 +15,7 @@ class UsersController < ApplicationController
         render :show
       end
       format.json do
-        render json: Phaxio.list_faxes(search_params)
+        render json: get_user_faxes
       end
     end
   end
@@ -56,8 +56,31 @@ class UsersController < ApplicationController
       @user ||= User.find(params[:id])
     end
 
-    def search_params
-      search_params = { number: @user.fax_number }
+    def get_user_faxes
+      received_faxes = Phaxio.list_faxes(search_params(:received))
+      sent_faxes = Phaxio.list_faxes(search_params(:sent))
+
+      error_responses = [received_faxes, sent_faxes].select { |response| !response['success'] }
+      if error_responses.present?
+        return error_responses.first
+      end
+
+      {
+        success: received_faxes['success'],
+        message: received_faxes['message'],
+        data: (received_faxes['data'] + sent_faxes['data'])
+          .uniq {|f| f['id'] }
+          .sort { |a, b| b['requested_at'] <=> a['requested_at'] }
+      }
+    end
+
+    def search_params(direction)
+      search_params = {}
+      if :direction == :sent
+        search_params[:'tag[user]'] = @user.email
+      else
+        search_params[:number] = @user.fax_number
+      end
       search_params[:start] = params[:start].to_i if params[:start]
       search_params[:end] = params[:end].to_i if params[:end]
       search_params
