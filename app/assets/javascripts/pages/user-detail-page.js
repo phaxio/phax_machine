@@ -14,6 +14,8 @@ PhaxMachine.pages['user-detail-page'] = {
         data: {
           loading: true,
           empty: false,
+          totalSent: 'N/A',
+          totalReceived: 'N/A',
           faxes: []
         },
         methods: {
@@ -74,6 +76,8 @@ PhaxMachine.pages['user-detail-page'] = {
   updateUserFaxList: function(){
     return function(faxDataResponse){
       if (faxDataResponse.success){
+        this.userFaxList.totalSent = faxDataResponse.totals.sent;
+        this.userFaxList.totalReceived = faxDataResponse.totals.received;
         this.userFaxList.loading = false;
         this.userFaxList.empty = faxDataResponse.data.length == 0;
         this.userFaxList.faxes = faxDataResponse.data;

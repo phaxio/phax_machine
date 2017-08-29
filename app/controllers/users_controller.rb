@@ -69,8 +69,12 @@ class UsersController < ApplicationController
         success: received_faxes['success'],
         message: received_faxes['message'],
         data: (received_faxes['data'] + sent_faxes['data'])
-          .uniq {|f| f['id'] }
-          .sort { |a, b| b['requested_at'] <=> a['requested_at'] }
+          .uniq { |f| f['id'] }
+          .sort { |a, b| b['requested_at'] <=> a['requested_at'] },
+        totals: {
+          sent: sent_faxes['paging']['total_results'],
+          received: received_faxes['paging']['total_results']
+        }
       }
     end
 
