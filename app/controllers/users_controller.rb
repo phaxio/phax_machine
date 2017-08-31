@@ -80,7 +80,7 @@ class UsersController < ApplicationController
 
     def search_params(direction)
       search_params = {}
-      if :direction == :sent
+      if direction == :sent
         search_params[:'tag[user]'] = @user.email
       else
         search_params[:number] = @user.fax_number
