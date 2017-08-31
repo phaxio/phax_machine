@@ -53,3 +53,14 @@ Skip to section 2 below.
 2. In the second field which says "POST (or send email) to the above URL when a fax has been received," enter your application url followed by '/fax_received' (e.g. If you're using a quick and dirty Heroku installation, this url might look something like https://WHATYOUNAMEDYOURAPP.herokuapp.com/fax_received. *Note:* if you're using the quick and dirty setup, your faxing emails might be in your spam folder! )
 
 3. (Optional) Test the everything is working correctly by sending a fax to your Phaxio number and and seeing if it shows up in your email inbox! Note: make sure to check your spam folder!
+
+## Updating an app deployed using the "Deploy" button
+
+If you want to merge the latest code from this repository into a PhaxMachine instance deployed with
+the button above, you'll need to follow these instructions:
+
+We're assuming you already git and the heroku toolbelt installed.
+
+1. Clone this repository: `git clone https://github.com/phaxio/phax_machine.git`
+2. Add the heroku repository as well: `git remote add heroku https://git.heroku.com/HEROKU-APP-NAME.git` (Substituting `HEROKU-APP-NAME` with the name of your Heroku app)
+3. Push the latest changes to Heroku: `git push heroku master`
