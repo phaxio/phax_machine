@@ -59,8 +59,6 @@ Skip to section 2 below.
 If you want to merge the latest code from this repository into a PhaxMachine instance deployed with
 the button above, you'll need to follow these instructions:
 
-We're assuming you already git and the heroku toolbelt installed.
-
 1. Clone this repository: `git clone https://github.com/phaxio/phax_machine.git`
 2. Add the heroku repository as well: `git remote add heroku https://git.heroku.com/HEROKU-APP-NAME.git` (Substituting `HEROKU-APP-NAME` with the name of your Heroku app)
 3. Push the latest changes to Heroku: `git push heroku master`
