@@ -11,13 +11,29 @@ if ENV['RACK_ENV'] == 'development'
   Dotenv.load
 end
 
+def protected!
+  return if authorized?
+  headers['WWW-Authenticate'] = 'Basic Realm="Restricted Area"'
+  halt 401, "Not Authorized\n"
+end
+
+def authorized?
+  return true unless ENV['BASIC_AUTH_ENABLED']
+  user = ENV.fetch 'BASIC_AUTH_USER'
+  password = ENV.fetch 'BASIC_AUTH_PASSWORD'
+  @auth ||= Rack::Auth::Basic::Request.new(request.env)
+  @auth.provided? and @auth.basic? and @auth.credentials and @auth.credentials == [user, password]
+end
+
 class PhaxMachineSinatra < Sinatra::Application
   # Display faxes within the past 12 hours
   get '/' do
+    protected!
     erb :logs
   end
 
   get '/logs.json' do
+    protected!
     set_phaxio_creds
 
     start_time = Time.now - 43_200
@@ -26,10 +42,12 @@ class PhaxMachineSinatra < Sinatra::Application
   end
 
   get '/send' do
+    protected!
     erb :send
   end
 
   post '/send' do
+    protected!
     set_phaxio_creds
 
     api_response = Phaxio.send_fax(
@@ -40,6 +58,7 @@ class PhaxMachineSinatra < Sinatra::Application
   end
 
   get '/mailphax' do
+    protected!
     erb :mailphax
   end
 
@@ -111,6 +130,8 @@ class PhaxMachineSinatra < Sinatra::Application
   end
 
   get '/download_file' do
+    protected!
+
     set_phaxio_creds
 
     fax_id = params["fax_id"].to_i

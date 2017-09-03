@@ -2,6 +2,14 @@
 ENV['PHAXIO_API_KEY'] = 'TEST_API_KEY'
 ENV['PHAXIO_API_SECRET'] = 'TEST_API_SECRET'
 
+# Set basic auth vars before Rails is loaded
+BASIC_AUTH_ENABLED = 'true'
+BASIC_AUTH_USER = 'test_user'
+BASIC_AUTH_PASSWORD = 'test_password'
+ENV['BASIC_AUTH_ENABLED'] = BASIC_AUTH_ENABLED
+ENV['BASIC_AUTH_USER'] = BASIC_AUTH_USER
+ENV['BASIC_AUTH_PASSWORD'] = BASIC_AUTH_PASSWORD
+
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
