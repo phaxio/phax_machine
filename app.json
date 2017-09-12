@@ -40,6 +40,18 @@
     "SMTP_FROM": {
       "description": "The From address for any outgoing email from mailphax.",
       "required": false
+    },
+    "BASIC_AUTH_ENABLED": {
+      "description": "Set to true to enable authentication for administrative actions.",
+      "required": false
+    },
+    "BASIC_AUTH_USER": {
+      "description": "Set the admin username. Does nothing unless BASIC_AUTH_ENABLED is set.",
+      "required": false
+    },
+    "BASIC_AUTH_PASSWORD": {
+      "description": "Set the admin password. Does nothing unless BASIC_AUTH_ENABLED is set.",
+      "required": false
     }
   },
   "repository": "https://github.com/phaxio/phax_machine",
