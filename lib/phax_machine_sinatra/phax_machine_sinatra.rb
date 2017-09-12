@@ -109,8 +109,10 @@ class PhaxMachineSinatra < Sinatra::Application
     @fax = JSON.parse params['fax']
 
     recipient_number = Phonelib.parse(@fax['to_number']).e164
-    pg_connect do |db|
+    begin
       email_address = db[:users].where(fax_number: recipient_number).first[:email]
+    ensure
+      db.disconnect
     end
 
     fax_from = @fax['from_number']
@@ -156,8 +158,10 @@ class PhaxMachineSinatra < Sinatra::Application
     def sendFax(fromEmail, toEmail, filenames)
       set_phaxio_creds
 
-      pg_connect do |db|
+      begin
         from_fax_number = db[:users].where(email: fromEmail).first[:fax_number]
+      ensure
+        db.disconnect
       end
 
       number = Mail::Address.new(toEmail).local
@@ -207,9 +211,7 @@ class PhaxMachineSinatra < Sinatra::Application
       ENV['SMTP_FROM'] || 'phaxmachine@phaxio.com'
     end
 
-    def pg_connect &block
-      Sequel.connect(ENV["DATABASE_URL"]) do |db|
-        block.call(db)
-      end
+    def db
+      @db ||= Sequel.connect(ENV["DATABASE_URL"])
     end
 end
