@@ -1,9 +1,13 @@
-<h1>You've received a new fax!</h1>
+<% if @fax["direction"] == "received" %>
+  <h1>You've received a new fax!</h1>
+<% else %>
+  <h1>Your fax to <%= @fax["to"] %> <%= @success ? "succeeded" : "failed" %>!</h1>
+<% end %>
 
+<p><b>ID:</b> <%= @fax["id"] %></p>
 <p><b>Number of Pages:</b> <%= @fax["num_pages"] %></p>
-<p><b>Cost:</b> <%= @fax["cost"] %></p>
 <p><b>To:</b> <%= @fax["to_number"] %></p>
-<p><b>From:</b> <%= @fax["from_number"] %></p>
+<p><b>From:</b> <%= @fax["direction"] == "received" ? @fax["from_number"] : @fax["caller_id"] %></p>
 
 <p>The document has been attached to this email.</p>
 

@@ -133,6 +133,30 @@ class PhaxMachineSinatra < Sinatra::Application
     )
   end
 
+  post '/fax_sent' do
+    @fax = JSON.parse params['fax']
+    @success = params['success']
+
+    sender_number = Phonlib.parse(@fax['caller_id']).e164
+    begin
+      email_address = db[:users].where(fax_number: sender_number).first[:email]
+    ensure
+      db.disconnect
+    end
+
+    fax_to = @fax['to_number']
+    email_subject = "Fax to #{fax_to} #{@success ? 'succeeded' : 'failed'}"
+
+    Pony.mail(
+      to: email_address,
+      from: smtp_from_address,
+      subject: email_subject,
+      html_body: erb(:fax_email, layout: false),
+      via: :smtp,
+      via_options: smtp_options
+    )
+  end
+
   get '/download_file' do
     protected!
 
