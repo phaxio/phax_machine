@@ -138,8 +138,7 @@ class PhaxMachineSinatra < Sinatra::Application
     @success = params['success']
 
     email_address = @fax['tags']['user']
-    fax_to = @fax['to_number']
-    email_subject = "Fax to #{fax_to} #{@success ? 'succeeded' : 'failed'}"
+    email_subject = "Sent fax #{@success ? 'succeeded' : 'failed'}"
 
     Pony.mail(
       to: email_address,
