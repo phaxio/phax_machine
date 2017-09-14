@@ -137,7 +137,7 @@ class PhaxMachineSinatra < Sinatra::Application
     @fax = JSON.parse params['fax']
     @success = params['success']
 
-    sender_number = Phonlib.parse(@fax['caller_id']).e164
+    sender_number = Phonelib.parse(@fax['caller_id']).e164
     begin
       email_address = db[:users].where(fax_number: sender_number).first[:email]
     ensure
