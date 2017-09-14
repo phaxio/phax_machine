@@ -5,9 +5,6 @@ require 'pony'
 require 'json'
 require 'tempfile'
 require 'sequel'
-require 'logger'
-
-logger = Logger.new(STDOUT)
 
 if ENV['RACK_ENV'] == 'development'
   require 'dotenv'
@@ -140,15 +137,7 @@ class PhaxMachineSinatra < Sinatra::Application
     @fax = JSON.parse params['fax']
     @success = params['success']
 
-    sender_number = Phonelib.parse(@fax['caller_id']).e164
-    logger.error("Sender number: #{sender_number}")
-    logger.error("Fax: #{@fax.inspect}")
-    begin
-      email_address = db[:users].where(fax_number: sender_number).first[:email]
-    ensure
-      db.disconnect
-    end
-
+    email_address = @fax['tags']['user']
     fax_to = @fax['to_number']
     email_subject = "Fax to #{fax_to} #{@success ? 'succeeded' : 'failed'}"
 
