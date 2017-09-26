@@ -3,15 +3,16 @@ require 'rails_helper'
 RSpec.describe SessionsController, type: :controller do
 
 	describe 'visiting the login page' do
+		let(:user) { create :user }
     let(:action) { get :new }
 
-    it 'renders the manage users page' do
+    it 'renders the login page' do
       action
       expect(response).to be_ok
     end
 
-    xit 'redirects to the user index page if already logged in' do
-    	session[:user_id] = 1
+    it 'redirects to the user index page if a user is already logged in' do
+    	session[:user_id] = user.id
     	action
     	expect(response).to redirect_to('/users')
     end
@@ -26,6 +27,14 @@ RSpec.describe SessionsController, type: :controller do
   		expect(flash.notice).to eq("You've been logged in as #{user.email}")
   		expect(response).to redirect_to("/users")
   	end
+
+  	it 'redirects to the users index page if a user is already logged in' do
+  		session[:user_id] = user.id
+  		action
+  		expect(flash.notice).to eq("You're already logged in as #{user.email}.")
+  		expect(response).to redirect_to('/users')
+  	end
+
   end
 
   describe 'destroying a session (logging out)' do
