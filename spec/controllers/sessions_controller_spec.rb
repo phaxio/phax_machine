@@ -35,6 +35,13 @@ RSpec.describe SessionsController, type: :controller do
   		expect(response).to redirect_to('/users')
   	end
 
+  	it 'redirects to the login page if invalid input is provided' do
+  		user.save
+  		post :create, params: { :login => { email: user.email, password: "nopenope" } }
+      expect(flash.notice).to eq("Login failed.")
+  		expect(response).to redirect_to('/login')
+  	end
+
   end
 
   describe 'destroying a session (logging out)' do

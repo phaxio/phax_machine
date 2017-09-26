@@ -19,7 +19,7 @@ class SessionsController < ApplicationController
 	      session[:user_id] = @user.id
 	      redirect_to '/users', notice: "You've been logged in as #{current_user.email}"
 	    else
-	      render :new
+	      redirect_to '/login', notice: "Login failed."
 	    end
 	  end
 	end
