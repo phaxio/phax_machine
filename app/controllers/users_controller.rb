@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   include UsersHelper
-  
+
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
   def index
@@ -26,6 +26,7 @@ class UsersController < ApplicationController
     @user = User.new user_params
 
     if @user.save
+      session[:user_id] = @user.id
       redirect_to users_path, notice: 'User added successfully.'
     else
       render :new
