@@ -21,6 +21,8 @@
       <tr data-user-id="<%= user.id %>">
         <% if logged_in? && current_user.id == user.id %>
           <td><%= link_to "Edit", edit_user_path(user) %></td>
+        <% else %>
+          <td></td> <!-- If I don't include this all td's shift to the right one-->
         <% end %>
         <td><%= link_to user.email, user_path(user) %></td>
         <td><%= user.fax_number %></td>
