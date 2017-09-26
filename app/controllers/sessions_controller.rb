@@ -1,21 +1,32 @@
 class SessionsController < ApplicationController
+	include UsersHelper
+
 	def new
-		@user = User.new
+		if logged_in?
+      redirect_to "/users", notice: "You're already logged in as #{current_user.email}."
+    else
+      @user = User.new
+      render :new
+    end
 	end
 
 	def create
-		@user = User.find_by(email: params[:login][:email])
-    if @user && @user.authenticate(params[:login][:password])
-      session[:user_id] = @user.id
-      redirect_to '/users'
-    else
-      render :new
-    end
+		if logged_in?
+			redirect_to "/users", notice: "You're already logged in as #{current_user.email}."
+		else
+			@user = User.find_by(email: params[:login][:email])
+	    if @user && @user.authenticate(params[:login][:password])
+	      session[:user_id] = @user.id
+	      redirect_to '/users', notice: "You've been logged in as #{current_user.email}"
+	    else
+	      render :new
+	    end
+	  end
 	end
 
 	def destroy
 		session.delete(:user_id)
 		@current_user = nil
-    redirect_to "/users"
+    redirect_to "/users", notice: "You have been logged out."
 	end
 end

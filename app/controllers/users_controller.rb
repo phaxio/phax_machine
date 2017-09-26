@@ -46,7 +46,7 @@ class UsersController < ApplicationController
     if authorized?
       render :edit
     else
-      redirect_to "/users", notice: 'You cannot edit other users!'
+      redirect_to "/users", notice: 'You cannot edit other users.'
     end
   end
 
@@ -58,7 +58,7 @@ class UsersController < ApplicationController
         render :edit
       end
     else
-      redirect_to "/users", notice: 'You cannot edit other users!'
+      redirect_to "/users", notice: 'You cannot edit other users.'
     end
   end
 
@@ -67,7 +67,7 @@ class UsersController < ApplicationController
       @user.destroy
       redirect_to users_path, notice: 'User deleted successfully.'
     else
-      redirect_to "/users", notice: 'You cannot delete other users!'
+      redirect_to "/users", notice: 'You cannot delete other users.'
     end
   end
 
