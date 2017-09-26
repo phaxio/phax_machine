@@ -1,7 +1,13 @@
 <h1 class="page_title">Manage Users</h1>
 
 <div class="page_actions">
-  <%= link_to "Add User", new_user_path, class: "btn btn-primary" %>
+  <% if logged_in? %>
+    <p> logged in as <%= current_user.email %> </p>
+    <%= link_to "Log Out", :logout, method: :post, class: "btn btn-primary" %>
+  <% else %>
+    <%= link_to "Login", :login, class: "btn btn-primary" %>
+    <%= link_to "Add User", new_user_path, class: "btn btn-primary" %>
+  <% end %>
 </div>
 
 <table class="table users-table">
@@ -13,7 +19,9 @@
   <tbody>
     <% @users.each do |user| %>
       <tr data-user-id="<%= user.id %>">
-        <td><%= link_to "Edit", edit_user_path(user) %></td>
+        <% if logged_in? && current_user.id == user.id %>
+          <td><%= link_to "Edit", edit_user_path(user) %></td>
+        <% end %>
         <td><%= link_to user.email, user_path(user) %></td>
         <td><%= user.fax_number %></td>
       </tr>
