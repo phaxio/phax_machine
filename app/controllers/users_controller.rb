@@ -116,6 +116,8 @@ class UsersController < ApplicationController
     end
 
     def authorized?
-      set_user.id == current_user.id ? true : false
+      if set_user && current_user
+        set_user.id == current_user.id ? true : false
+      end
     end
 end
