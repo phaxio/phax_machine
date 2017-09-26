@@ -126,6 +126,10 @@ RSpec.describe UsersController, type: :controller do
     let(:user) { create :user }
     let(:action) { get :edit, params: {id: user} }
 
+    before :each do 
+      session[:user_id] = user.id 
+    end
+    
     it 'renders the edit user page' do
       action
       expect(response).to be_ok
@@ -137,6 +141,10 @@ RSpec.describe UsersController, type: :controller do
   describe 'updating a user' do
     let!(:user) { create :user }
     let(:action) { patch :update, params: params }
+
+    before :each do 
+      session[:user_id] = user.id 
+    end
 
     context 'valid' do
       let(:params) { {id: user.id, user: attributes_for(:user)} }
@@ -173,6 +181,10 @@ RSpec.describe UsersController, type: :controller do
   describe 'deleting a user' do
     let!(:user) { create :user }
     let(:action) { delete :destroy, params: {id: user} }
+
+    before :each do 
+      session[:user_id] = user.id 
+    end
 
     it 'deletes the user' do
       action
