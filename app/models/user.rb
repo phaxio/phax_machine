@@ -1,6 +1,9 @@
 class User < ApplicationRecord
   validates :email, presence: true, length: {maximum: 60}, email: true
   validates :fax_number, presence: true, length: {maximum: 60}, phone: {possible: true}
+  validates :password, length: { in: 6..32 }
+
+  has_secure_password
 
   before_save :format_fax_number
 
