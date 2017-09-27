@@ -35,6 +35,8 @@ gem 'jbuilder', '~> 2.5'
 
 gem 'phonelib'
 
+gem 'bcrypt'
+
 gem 'jquery-rails'
 gem 'bootstrap-sass'
 
