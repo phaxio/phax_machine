@@ -81,6 +81,7 @@ RSpec.describe UsersController, type: :controller do
 
   describe 'visiting the add user page' do
     let(:action) { get :new }
+    let(:user) { create :user }
 
     it 'renders the new user page' do
       action
@@ -88,10 +89,18 @@ RSpec.describe UsersController, type: :controller do
       assert_select('.page_title', text: 'Add User')
       assert_select('form.new_user')
     end
+
+    it 'redirects to the user index page if a user is already logged in' do
+      session[:user_id] = user.id
+      action
+      expect(flash.notice).to eq('Please log out to add a new user.')
+      expect(response).to redirect_to("/users")
+    end
   end
 
   describe 'adding a user' do
     let(:action) { post :create, params: params }
+    let(:user) { create :user }
 
     context 'valid' do
       let(:params) { {user: attributes_for(:user)} }
@@ -109,6 +118,13 @@ RSpec.describe UsersController, type: :controller do
         action
         expect(response).to redirect_to(users_path)
       end
+
+      it 'redirects to the user index page if a user is already logged in' do
+        session[:user_id] = user.id
+        action
+        expect(flash.notice).to eq('Please log out to add a new user.')
+        expect(response).to redirect_to("/users")
+      end
     end
 
     context 'invalid' do
@@ -124,6 +140,7 @@ RSpec.describe UsersController, type: :controller do
 
   describe 'visiting the edit user page' do
     let(:user) { create :user }
+    let(:other_user) { create :user }
     let(:action) { get :edit, params: {id: user} }
 
     before :each do 
@@ -135,6 +152,12 @@ RSpec.describe UsersController, type: :controller do
       expect(response).to be_ok
       assert_select '.page_title', text: 'Edit User'
       assert_select "form#edit_user_#{user.id}"
+    end
+
+    it "redirects to the user index page if the user tries to edit another user's profile" do
+      get :edit, params: {id: other_user.id }
+      expect(flash.notice).to eq('You cannot edit other users.')
+      expect(response).to redirect_to("/users")
     end
   end
 
@@ -169,17 +192,26 @@ RSpec.describe UsersController, type: :controller do
 
     context 'invalid' do
       let(:params) { {id: user.id, user: attributes_for(:user, email: 'invalid')} }
+      let(:other_user) { create :user }
 
       it 'renders the edit template' do
         action
         expect(response).to be_ok
         assert_select '.page_title', text: 'Edit User'
       end
+
+      it "if the user is unauthorized the user is redirected to the user index page" do
+        session[:user_id] = other_user.id
+        action
+        expect(flash.notice).to eq("You cannot edit other users.")
+        expect(response).to redirect_to("/users")
+      end
     end
   end
 
   describe 'deleting a user' do
     let!(:user) { create :user }
+    let(:other_user) { create :user }
     let(:action) { delete :destroy, params: {id: user} }
 
     before :each do 
@@ -200,5 +232,12 @@ RSpec.describe UsersController, type: :controller do
       action
       expect(response).to redirect_to(users_path)
     end
+
+    it "if the user is unauthorized the user is redirected to the user index page" do
+        session[:user_id] = other_user.id
+        action
+        expect(flash.notice).to eq("You cannot delete other users.")
+        expect(response).to redirect_to("/users")
+      end
   end
 end

@@ -2,7 +2,6 @@
 
 <div class="page_actions">
   <% if logged_in? %>
-    <p> logged in as <%= current_user.email %> </p>
     <%= link_to "Log Out", :logout, method: :post, class: "btn btn-primary" %>
   <% else %>
     <%= link_to "Login", :login, class: "btn btn-primary" %>
