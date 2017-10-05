@@ -2,9 +2,9 @@
 
 <div class="page_actions">
   <% if logged_in? %>
-    <%= link_to "Log Out", :logout, method: :post, class: "btn btn-primary" %>
+    <%= link_to "Log Out", session_destroy_path, method: :post, class: "btn btn-primary" %>
   <% else %>
-    <%= link_to "Login", :login, class: "btn btn-primary" %>
+    <%= link_to "Login", new_session_path, class: "btn btn-primary" %>
     <%= link_to "Add User", new_user_path, class: "btn btn-primary" %>
   <% end %>
 </div>
@@ -21,7 +21,7 @@
         <% if logged_in? && current_user.id == user.id %>
           <td><%= link_to "Edit", edit_user_path(user) %></td>
         <% else %>
-          <td></td> <!-- If I don't include this all td's shift to the right one-->
+          <td></td> <!-- all td's shift to the right one w/o this-->
         <% end %>
         <td><%= link_to user.email, user_path(user) %></td>
         <td><%= user.fax_number %></td>

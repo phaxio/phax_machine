@@ -14,7 +14,7 @@ RSpec.describe SessionsController, type: :controller do
     it 'redirects to the user index page if a user is already logged in' do
     	session[:user_id] = user.id
     	action
-    	expect(response).to redirect_to('/users')
+    	expect(response).to redirect_to(users_path)
     end
   end
 
@@ -25,21 +25,21 @@ RSpec.describe SessionsController, type: :controller do
   	it 'logs the user in and redirects the user to the users index page' do
   		action
   		expect(flash.notice).to eq("You've been logged in as #{user.email}")
-  		expect(response).to redirect_to("/users")
+  		expect(response).to redirect_to(users_path)
   	end
 
   	it 'redirects to the users index page if a user is already logged in' do
   		session[:user_id] = user.id
   		action
   		expect(flash.notice).to eq("You're already logged in as #{user.email}.")
-  		expect(response).to redirect_to('/users')
+  		expect(response).to redirect_to(users_path)
   	end
 
   	it 'redirects to the login page if invalid input is provided' do
   		user.save
   		post :create, params: { :login => { email: user.email, password: "nopenope" } }
       expect(flash.notice).to eq("Login failed.")
-  		expect(response).to redirect_to('/login')
+  		expect(response).to redirect_to(new_session_path)
   	end
 
   end

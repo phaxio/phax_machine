@@ -156,7 +156,7 @@ RSpec.describe UsersController, type: :controller do
 
     it "redirects to the user index page if the user tries to edit another user's profile" do
       get :edit, params: {id: other_user.id }
-      expect(flash.notice).to eq('You cannot edit other users.')
+      expect(flash.notice).to eq('You cannot edit other users')
       expect(response).to redirect_to(users_path)
     end
   end
@@ -203,7 +203,7 @@ RSpec.describe UsersController, type: :controller do
       it "if the user is unauthorized the user is redirected to the user index page" do
         session[:user_id] = other_user.id
         action
-        expect(flash.notice).to eq("You cannot edit other users.")
+        expect(flash.notice).to eq("You cannot edit other users")
         expect(response).to redirect_to(users_path)
       end
     end

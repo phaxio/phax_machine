@@ -2,6 +2,7 @@ class UsersController < ApplicationController
   include UsersHelper
 
   before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :authorize_user, only: [:edit, :update]
 
   def index
     @users = User.all
@@ -43,22 +44,14 @@ class UsersController < ApplicationController
   end
 
   def edit
-    if authorized?
-      render :edit
-    else
-      redirect_to users_path, notice: 'You cannot edit other users.'
-    end
+    render :edit
   end
 
   def update
-    if authorized?
-      if @user.update user_params
-        redirect_to users_path, notice: 'User updated successfully.'
-      else
-        render :edit
-      end
+    if @user.update user_params
+      redirect_to users_path, notice: 'User updated successfully.'
     else
-      redirect_to users_path, notice: 'You cannot edit other users.'
+      render :edit
     end
   end
 
@@ -119,5 +112,9 @@ class UsersController < ApplicationController
       if set_user && current_user
         set_user.id == current_user.id ? true : false
       end
+    end
+
+    def authorize_user
+      redirect_to(users_path, notice: 'You cannot edit other users') unless authorized?
     end
 end
