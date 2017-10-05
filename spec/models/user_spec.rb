@@ -48,4 +48,31 @@ RSpec.describe User, type: :model do
     expect(user.save).to eq(true)
     expect(user.fax_number).to eq("+12251231234")
   end
+
+  it 'requires that password be 6 or more characters' do
+    user.password = "12345"
+    expect(user.save).to be(false)
+    expect(user.errors[:password]).to include("is too short (minimum is 6 characters)")
+  end
+
+  it 'requires that password less than 32 characters' do
+    user.password = "-" * 33
+    expect(user.save).to be(false)
+    expect(user.errors[:password]).to include("is too long (maximum is 32 characters)")
+  end
+
+  it 'requires that password be present' do
+    user.password = nil
+    expect(user.save).to be(false)
+    expect(user.errors[:password]).to include("can't be blank")
+  end
+
+  it 'requires emails be unique' do
+    user.email = "generic@gmail.com"
+    user.save
+    user2 = User.create(password: "password", email: "generic@gmail.com", fax_number: "12223334444")
+    user.save
+    expect(user2.save).to be (false)
+    expect(user2.errors[:email]).to include('has already been taken')
+  end
 end
