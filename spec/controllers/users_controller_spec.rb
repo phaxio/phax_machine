@@ -94,7 +94,7 @@ RSpec.describe UsersController, type: :controller do
       session[:user_id] = user.id
       action
       expect(flash.notice).to eq('Please log out to add a new user.')
-      expect(response).to redirect_to("/users")
+      expect(response).to redirect_to(users_path)
     end
   end
 
@@ -123,7 +123,7 @@ RSpec.describe UsersController, type: :controller do
         session[:user_id] = user.id
         action
         expect(flash.notice).to eq('Please log out to add a new user.')
-        expect(response).to redirect_to("/users")
+        expect(response).to redirect_to(users_path)
       end
     end
 
@@ -157,7 +157,7 @@ RSpec.describe UsersController, type: :controller do
     it "redirects to the user index page if the user tries to edit another user's profile" do
       get :edit, params: {id: other_user.id }
       expect(flash.notice).to eq('You cannot edit other users.')
-      expect(response).to redirect_to("/users")
+      expect(response).to redirect_to(users_path)
     end
   end
 
@@ -204,7 +204,7 @@ RSpec.describe UsersController, type: :controller do
         session[:user_id] = other_user.id
         action
         expect(flash.notice).to eq("You cannot edit other users.")
-        expect(response).to redirect_to("/users")
+        expect(response).to redirect_to(users_path)
       end
     end
   end
@@ -237,7 +237,7 @@ RSpec.describe UsersController, type: :controller do
         session[:user_id] = other_user.id
         action
         expect(flash.notice).to eq("You cannot delete other users.")
-        expect(response).to redirect_to("/users")
+        expect(response).to redirect_to(users_path)
       end
   end
 end
