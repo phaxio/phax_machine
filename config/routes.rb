@@ -4,9 +4,6 @@ Rails.application.routes.draw do
   resources :users
   resources :sessions, only: [:new, :create, :destroy]
 
-  # get "/login" => "sessions#new"
-  # post "/login" => "sessions#create"
-  post "/logout" => "sessions#destroy"
-
+  post "/sessions" => "sessions#create"
   mount PhaxMachineSinatra => "/"
 end

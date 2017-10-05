@@ -57,6 +57,7 @@ class UsersController < ApplicationController
 
   def destroy
     if authorized?
+      session.delete(:user_id)
       @user.destroy
       redirect_to users_path, notice: 'User deleted successfully.'
     else

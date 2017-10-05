@@ -2,7 +2,7 @@
 
 <div class="page_actions">
   <% if logged_in? %>
-    <%= link_to "Log Out", session_destroy_path, method: :post, class: "btn btn-primary" %>
+    <%= link_to "Log Out", session_path(current_user.id), method: :delete, class: "btn btn-primary" %>
   <% else %>
     <%= link_to "Login", new_session_path, class: "btn btn-primary" %>
     <%= link_to "Add User", new_user_path, class: "btn btn-primary" %>

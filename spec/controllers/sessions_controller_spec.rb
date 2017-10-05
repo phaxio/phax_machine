@@ -45,14 +45,15 @@ RSpec.describe SessionsController, type: :controller do
   end
 
   describe 'destroying a session (logging out)' do
-  	let(:user) { create :user }
-  	let(:action) {post :create, params: { :login => { email: user.email, password: user.password } } }
+  	let!(:user) { create :user }
+  	let!(:action) {post :create, params: { :login => { email: user.email, password: user.password } } }
 
   	it 'logs the user out and redirects to the users index page' do
-  		action
-  		post :destroy
+      session[:user_id] = user.id
+  		delete :destroy, params: {id: user.id}
   		expect(flash.notice).to eq("You have been logged out.")
-  		expect(response).to redirect_to("/users")
+      expect(session[:user_id]).to be_nil
+  		expect(response).to redirect_to(users_path)
   	end
   end
 
