@@ -1,5 +1,6 @@
 class User < ApplicationRecord
-  validates :email, presence: true, length: {maximum: 60}, email: true
+  has_many :user_emails
+
   validates :fax_number, presence: true, length: {maximum: 60}, phone: {possible: true}
 
   before_save :format_fax_number, :generate_fax_tag

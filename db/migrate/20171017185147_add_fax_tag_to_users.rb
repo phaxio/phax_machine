@@ -5,7 +5,7 @@ class AddFaxTagToUsers < ActiveRecord::Migration[5.1]
       user.update! fax_tag: user.email
     end
     change_column_null :users, :fax_tag, false
-    add_index :users, :fax_tag
+    add_index :users, :fax_tag, name: 'index_users_by_fax_tag'
   end
 
   def down
