@@ -2,11 +2,12 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
 
   def index
-    @users = User.all
+    @users = User.all.includes(:user_emails)
   end
 
   def new
     @user = User.new
+    @user.user_emails.build
   end
 
   def show
@@ -49,11 +50,11 @@ class UsersController < ApplicationController
   private
 
     def user_params
-      params.require(:user).permit(:email, :fax_number)
+      params.require(:user).permit(:fax_number, {user_emails_attributes: [:email, :id]})
     end
 
     def set_user
-      @user ||= User.find(params[:id])
+      @user ||= User.includes(:user_emails).find(params[:id])
     end
 
     def get_user_faxes
@@ -81,7 +82,7 @@ class UsersController < ApplicationController
     def search_params(direction)
       search_params = {}
       if direction == :sent
-        search_params[:'tag[user]'] = @user.email
+        search_params[:'tag[user]'] = @user.fax_tag
       else
         search_params[:number] = @user.fax_number
       end

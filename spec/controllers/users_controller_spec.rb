@@ -10,7 +10,7 @@ RSpec.describe UsersController, type: :controller do
       expect(response).to be_ok
       assert_select('.page_title', text: 'Manage Users')
       assert_select('.users-table') do
-        assert_select('td', text: user.email)
+        assert_select('td .user-email', text: user.user_emails.first.email)
         assert_select('td', text: user.fax_number)
       end
     end
@@ -27,7 +27,7 @@ RSpec.describe UsersController, type: :controller do
       it 'renders the user show page' do
         action
         expect(response).to be_ok
-        assert_select '.page_title', text: "Viewing #{user.email}"
+        assert_select '.page_title', text: "Viewing User ##{user.id}"
       end
     end
 
@@ -139,13 +139,13 @@ RSpec.describe UsersController, type: :controller do
     let(:action) { patch :update, params: params }
 
     context 'valid' do
-      let(:params) { {id: user.id, user: attributes_for(:user)} }
+      let(:params) { {id: user.id, user: attributes_for(:user, fax_number: '+12025550181')} }
 
       it 'updates the user' do
         expect do
           action
           user.reload
-        end.to change(user, :email)
+        end.to change(user, :fax_number)
       end
 
       it 'sets the success message' do
@@ -160,7 +160,7 @@ RSpec.describe UsersController, type: :controller do
     end
 
     context 'invalid' do
-      let(:params) { {id: user.id, user: attributes_for(:user, email: 'invalid')} }
+      let(:params) { {id: user.id, user: attributes_for(:user, fax_number: 'invalid')} }
 
       it 'renders the edit template' do
         action

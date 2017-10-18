@@ -1,6 +1,12 @@
 <% @page_class = 'user-detail-page' %>
 
-<h1 class="page_title">Viewing <%= @user.email %></h1>
+<h1 class="page_title">Viewing User #<%= @user.id %></h1>
+
+<div class="user-detail">
+  <% @user.user_emails.each do |user_email| %>
+    <span class="user-email"><%= user_email.email %></span>
+  <% end %>
+</div>
 
 <div id="userFaxList" data-user-id="<%= @user.id %>">
   <div>Total sent in the past week: {{ totalSent }}</div>

@@ -7,14 +7,20 @@
 <table class="table users-table">
   <thead>
     <th>Edit</th>
-    <th>Email</th>
+    <th>Emails</th>
     <th>Fax Number</th>
   </thead>
   <tbody>
     <% @users.each do |user| %>
       <tr data-user-id="<%= user.id %>">
         <td><%= link_to "Edit", edit_user_path(user) %></td>
-        <td><%= link_to user.email, user_path(user) %></td>
+        <td>
+          <%= link_to user_path(user) do %>
+            <% user.user_emails.each do |user_email| %>
+              <span class="user-email"><%= user_email.email %></span>
+            <% end %>
+          <% end %>
+        </td>
         <td><%= user.fax_number %></td>
       </tr>
     <% end %>
