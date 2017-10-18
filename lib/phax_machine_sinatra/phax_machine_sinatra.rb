@@ -110,7 +110,8 @@ class PhaxMachineSinatra < Sinatra::Application
 
     recipient_number = Phonelib.parse(@fax['to_number']).e164
     begin
-      email_address = db[:users].where(fax_number: recipient_number).first[:email]
+      user_id = db[:users].where(fax_number: recipient_number).first[:id]
+      email_addresses = db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
     ensure
       db.disconnect
     end
@@ -121,7 +122,7 @@ class PhaxMachineSinatra < Sinatra::Application
     email_subject = "Fax received from #{fax_from}"
 
     Pony.mail(
-      to: email_address,
+      to: email_addresses,
       from: smtp_from_address,
       subject: email_subject,
       html_body: erb(:fax_email, layout: false),
@@ -137,11 +138,17 @@ class PhaxMachineSinatra < Sinatra::Application
     @fax = JSON.parse params['fax']
     @success = params['success']
 
-    email_address = @fax['tags']['user']
+    fax_tag = @fax['tags']['user']
+    begin
+      user_id = db[:users].where(fax_tag: fax_tag).first[:id]
+      email_addresses = db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
+    ensure
+      db.disconnect
+    end
     email_subject = "Sent fax #{@success ? 'succeeded' : 'failed'}"
 
     Pony.mail(
-      to: email_address,
+      to: email_addresses,
       from: smtp_from_address,
       subject: email_subject,
       html_body: erb(:fax_email, layout: false),
@@ -176,7 +183,8 @@ class PhaxMachineSinatra < Sinatra::Application
       set_phaxio_creds
 
       begin
-        from_fax_number = db[:users].where(email: fromEmail).first[:fax_number]
+        user_id = db[:user_emails].where(email: fromEmail).first[:user_id]
+        from_fax_number = db[:users].where(id: user_id).first[:fax_number]
       ensure
         db.disconnect
       end
