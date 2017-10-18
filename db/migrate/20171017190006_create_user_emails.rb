@@ -12,6 +12,7 @@ class CreateUserEmails < ActiveRecord::Migration[5.1]
       parent = duplicates.find { |duplicate| duplicate.user_emails.any? }
       if parent
         parent.user_emails.create! user: parent, email: user.email
+        user.destroy
       else
         user.user_emails.create! user: user, email: user.email
       end
