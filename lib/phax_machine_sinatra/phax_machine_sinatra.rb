@@ -26,14 +26,6 @@ def authorized?
 end
 
 class PhaxMachineSinatra < Sinatra::Application
-
-  delete '/faxes/:fax_id/file' do
-    protected!
-    set_phaxio_creds
-    Phaxio.delete_fax(id: params[:fax_id].to_i)
-    erb :logs
-  end
-
   # Display faxes within the past 12 hours
   get '/' do
     protected!
@@ -176,6 +168,14 @@ class PhaxMachineSinatra < Sinatra::Application
     IO.binwrite tempfile.path, api_response.body
     logger.warn "Sending file with length #{File.size(tempfile.path)}"
     send_file tempfile.path, disposition: :attachment
+  end
+
+  delete '/faxes/:fax_id/file' do
+    protected!
+    set_phaxio_creds
+    api_response = Phaxio.delete_fax(id: params[:fax_id].to_i)
+    p api_response.body
+    erb :logs
   end
 
   private
