@@ -173,7 +173,7 @@ class PhaxMachineSinatra < Sinatra::Application
   delete '/faxes/:fax_id/file' do
     protected!
     set_phaxio_creds
-    api_response = Phaxio.delete_fax(id: params[:fax_id].to_i)
+    api_response = Phaxio.delete_fax(id: params[:fax_id].to_i, files_only: true)
     p api_response.body
     erb :logs
   end
