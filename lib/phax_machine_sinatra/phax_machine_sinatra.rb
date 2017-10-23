@@ -26,6 +26,13 @@ def authorized?
 end
 
 class PhaxMachineSinatra < Sinatra::Application
+
+  delete '/faxes/:fax_id/file' do
+    protected!
+    set_phaxio_creds
+    p params
+  end
+
   # Display faxes within the past 12 hours
   get '/' do
     protected!
