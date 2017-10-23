@@ -28,10 +28,10 @@ end
 class PhaxMachineSinatra < Sinatra::Application
 
   delete '/faxes/:fax_id/file' do
-    p params
     protected!
     set_phaxio_creds
-    
+    Phaxio.delete_fax(id: params[:fax_id].to_i)
+    erb :logs
   end
 
   # Display faxes within the past 12 hours
