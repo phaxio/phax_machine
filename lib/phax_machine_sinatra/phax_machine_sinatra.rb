@@ -178,9 +178,9 @@ class PhaxMachineSinatra < Sinatra::Application
     if request.xhr?
       api_response.body
     else
-      redirect "/"
+      erb :logs
     end
-    
+
   end
 
   private
