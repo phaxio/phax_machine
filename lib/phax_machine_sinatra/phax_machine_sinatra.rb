@@ -174,7 +174,13 @@ class PhaxMachineSinatra < Sinatra::Application
     protected!
     set_phaxio_creds
     api_response = Phaxio.delete_fax(id: params[:fax_id].to_i, files_only: true)
-    erb :logs
+
+    if request.xhr?
+      api_response.body
+    else
+      redirect "/"
+    end
+    
   end
 
   private
