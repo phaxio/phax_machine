@@ -164,20 +164,7 @@ class PhaxMachineSinatra < Sinatra::Application
 
     fax_id = params["fax_id"].to_i
     api_response = Phaxio.get_fax_file(id: fax_id, type: "p")
-
-    if request.xhr?
-      if api_response.include?('true')
-        download_file(api_response)
-      else
-        api_response.body
-      end
-    else
-      if api_response.include?('true')
-        download_file(api_response)
-      else
-        erb :logs
-      end
-    end
+    download_file(api_response)
   end
 
   delete '/faxes/:fax_id/file' do
@@ -196,9 +183,13 @@ class PhaxMachineSinatra < Sinatra::Application
 
     def download_file(api_response)
       tempfile = Tempfile.new(['fax', '.pdf'])
-      IO.binwrite tempfile.path, api_response.body
+      IO.binwrite(tempfile.path, api_response.body)
       logger.warn "Sending file with length #{File.size(tempfile.path)}"
-      send_file tempfile.path, disposition: :attachment
+      if File.size(tempfile) <= 69
+        send_file tempfile.path, disposition: :attachment
+      else
+        'Unable to download the file from Phaxio. It may be deleted due to your fax settings.'
+      end
     end
 
     def set_phaxio_creds
