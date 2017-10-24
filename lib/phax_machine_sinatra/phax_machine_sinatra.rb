@@ -185,7 +185,7 @@ class PhaxMachineSinatra < Sinatra::Application
       tempfile = Tempfile.new(['fax', '.pdf'])
       IO.binwrite(tempfile.path, api_response.body)
       logger.warn "Sending file with length #{File.size(tempfile.path)}"
-      if File.size(tempfile) <= 69
+      if File.size(tempfile) > 68
         send_file tempfile.path, disposition: :attachment
       else
         'Unable to download the file from Phaxio. It may be deleted due to your fax settings.'
