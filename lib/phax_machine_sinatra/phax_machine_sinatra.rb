@@ -75,7 +75,7 @@ class PhaxMachineSinatra < Sinatra::Application
   end
 
   post '/mailgun' do
-    if not params['sender']
+    if not params['from']
       return [400, "Must include a sender"]
     elsif not params['recipient']
       return [400, "Must include a recipient"]
@@ -97,7 +97,8 @@ class PhaxMachineSinatra < Sinatra::Application
       i += 1
     end
 
-    sendFax(params['sender'], params['recipient'],files)
+    sender = Mail::AddressList.new(params['from']).addresses.first.address
+    sendFax(sender, params['recipient'],files)
     "OK"
   end
 
