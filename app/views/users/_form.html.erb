@@ -15,7 +15,15 @@
     <%= f.label :emails %>
     <div id="userEmailList">
       <%= f.fields_for :user_emails do |e| %>
-        <%= e.email_field :email, required: true, class: 'form-control' %>
+        <div class="input-group">
+          <%= e.hidden_field :_destroy, class: 'destroy-field' %>
+          <%= e.email_field :email, required: true, class: 'form-control' %>
+          <span class="input-group-btn">
+            <a class="btn btn-secondary btn-remove-email">
+              <i class="glyphicon glyphicon-trash"></i>
+            </a>
+          </span>
+        </div>
       <% end %>
     </div>
     <br>

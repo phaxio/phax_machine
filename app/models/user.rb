@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   has_many :user_emails, dependent: :destroy
-  accepts_nested_attributes_for :user_emails
+  accepts_nested_attributes_for :user_emails, allow_destroy: true
 
   validates :fax_number, presence: true, length: {maximum: 60}, phone: {possible: true}
 
