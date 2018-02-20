@@ -136,9 +136,13 @@ class PhaxMachineSinatra < Sinatra::Application
   end
 
   post '/fax_sent' do
-    p @fax = JSON.parse params['fax']
-    p @success = @fax['status'] == 'success'
+    @fax = JSON.parse params['fax']
+    @success = @fax['status'] == 'success'
 
+    p "=============================="
+    p @fax
+    p @success
+    p "=============================="
     fax_tag = @fax['tags']['user']
     begin
       user_id = db[:users].where(fax_tag: fax_tag).first[:id]
