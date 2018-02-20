@@ -136,8 +136,8 @@ class PhaxMachineSinatra < Sinatra::Application
   end
 
   post '/fax_sent' do
-    @fax = JSON.parse params['fax']
-    @success = @fax['status'] == 'success'
+    p @fax = JSON.parse params['fax']
+    p @success = @fax['status'] == 'success'
 
     fax_tag = @fax['tags']['user']
     begin
