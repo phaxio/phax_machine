@@ -108,7 +108,9 @@ class PhaxMachineSinatra < Sinatra::Application
 
   post '/fax_received' do
     @fax = JSON.parse params['fax']
-    @success = @fax['status'] == 'success' #added this for debugging
+
+    @success = @fax['status'] == 'success' #added this line for debugging
+    
     recipient_number = Phonelib.parse(@fax['to_number']).e164
     begin
       user_id = db[:users].where(fax_number: recipient_number).first[:id]
@@ -120,6 +122,9 @@ class PhaxMachineSinatra < Sinatra::Application
     fax_from = @fax['from_number']
     fax_file_name = params['filename']['filename']
     fax_file_contents = params['filename']['tempfile'].read
+
+    @success = false #forcing the email_subject to be false
+
     email_subject = "Sent fax #{@success ? 'succeeded' : 'failed'}"
     #email_subject = "Fax received from #{fax_from}" #old email subject
 
