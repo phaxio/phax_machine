@@ -109,8 +109,7 @@ class PhaxMachineSinatra < Sinatra::Application
   post '/fax_received' do
     @fax = JSON.parse params['fax']
 
-    @fax['status'] == 'failed' # added this line for debugging
-    @success = @fax['status'] == 'success' # added this line for debugging
+    @fax['status'] = 'failed' #added for debugging
 
     recipient_number = Phonelib.parse(@fax['to_number']).e164
     begin
@@ -123,11 +122,7 @@ class PhaxMachineSinatra < Sinatra::Application
     fax_from = @fax['from_number']
     fax_file_name = params['filename']['filename']
     fax_file_contents = params['filename']['tempfile'].read
-
-    email_subject = "Sent fax #{@success ? 'succeeded' : 'failed'}"
-    #email_subject = "Fax received from #{fax_from}" #old email subject
-
-    @success = @fax['status'] == 'success'
+    email_subject = "Fax received from #{fax_from}"
 
     Pony.mail(
       to: email_addresses,

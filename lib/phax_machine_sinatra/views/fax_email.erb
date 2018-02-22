@@ -7,7 +7,9 @@
 <p><b>ID:</b> <%= @fax["id"] %></p>
 <p><b>Status:</b> <%= @fax["status"] %></p>
 
-<p><b>Debugging Status:</b> <%= @fax["status"].class %></p>
+<p><b>Debugging Fax Object:</b> <%= @fax %></p>
+<p><b>Debugging Fax Status:</b> <%= @fax %></p>
+<p><b>Debugging Fax Status Class:</b> <%= @fax["status"].class %></p>
 
 <p><b>Number of Pages:</b> <%= @fax["num_pages"] %></p>
 <% if @fax["direction"] == "received" %>
