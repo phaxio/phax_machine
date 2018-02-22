@@ -1,19 +1,13 @@
 <% if @fax["direction"] == "received" %>
   <h1>You've received a new fax!</h1>
 <% else %>
-  <h1>Your fax <%= @fax["status"] %>!</h1>
+	<%= @success %>
+	<%= @success.class %>
+  <h1>Your fax <%= @success ? "succeeded" : "failed" %>!</h1>
 <% end %>
 
 <p><b>ID:</b> <%= @fax["id"] %></p>
 <p><b>Status:</b> <%= @fax["status"] %></p>
-<% @boolean = @fax['status'] == 'succeeded' %>
-<p><b>@fax['status'] boolean</b> <%= @boolean %></p>
-<p><b>@fax['status'] boolean</b> <%= @boolean.class %></p>
-
-<p><b>Debugging Fax Object:</b> <%= @fax %></p>
-<p><b>Debugging Fax Status:</b> <%= @fax['status'] %></p>
-<p><b>Debugging Fax Status Class:</b> <%= @fax["status"].class %></p>
-
 <p><b>Number of Pages:</b> <%= @fax["num_pages"] %></p>
 <% if @fax["direction"] == "received" %>
   <p><b>To:</b> <%= @fax["to_number"] %></p>
