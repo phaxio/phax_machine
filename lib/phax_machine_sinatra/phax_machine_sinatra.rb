@@ -127,13 +127,13 @@ class PhaxMachineSinatra < Sinatra::Application
     fax_from = @fax['from_number']
     fax_file_name = params['filename']['filename']
     fax_file_contents = params['filename']['tempfile'].read
-    email_subject = "Fax received from #{fax_from}"
-    email_subject2 = "Sent fax #{@success ? 'succeeded' : 'failed'}" #make this email subject 1
+    # email_subject = "Fax received from #{fax_from}"
+    email_subject = "Sent fax #{@success ? 'succeeded' : 'failed'}" #make this email subject 1
 
     Pony.mail(
       to: email_addresses,
       from: smtp_from_address,
-      subject: email_subject2, #make this email subject 1
+      subject: email_subject,
       html_body: erb(:fax_email, layout: false),
       attachments: {
         fax_file_name => fax_file_contents
