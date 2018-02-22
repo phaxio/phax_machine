@@ -1,6 +1,7 @@
 <% if @fax["direction"] == "received" %>
   <h1>You've received a new fax!</h1>
 <% else %>
+	<%= @fax %>
 	<%= @success %>
 	<%= @success.class %>
   <h1>Your fax <%= @success ? "succeeded" : "failed" %>!</h1>
