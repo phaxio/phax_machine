@@ -108,6 +108,7 @@ class PhaxMachineSinatra < Sinatra::Application
 
   post '/fax_received' do
     @fax = JSON.parse params['fax']
+    @fax = "lol nope"
     @success = @fax['status'] == 'success'
 
     p "=============================="
@@ -152,6 +153,7 @@ class PhaxMachineSinatra < Sinatra::Application
      @success = false
     p @success
     p "=============================="
+    
     fax_tag = @fax['tags']['user']
     begin
       user_id = db[:users].where(fax_tag: fax_tag).first[:id]
