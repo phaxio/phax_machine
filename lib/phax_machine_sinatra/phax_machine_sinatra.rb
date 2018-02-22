@@ -112,6 +112,7 @@ class PhaxMachineSinatra < Sinatra::Application
 
     p "=============================="
     p @fax
+    @success = false
     p @success
     p "=============================="
 
@@ -148,6 +149,7 @@ class PhaxMachineSinatra < Sinatra::Application
 
     p "=============================="
     p @fax
+     @success = false
     p @success
     p "=============================="
     fax_tag = @fax['tags']['user']
