@@ -137,8 +137,6 @@ class PhaxMachineSinatra < Sinatra::Application
 
   post '/fax_sent' do
     @fax = JSON.parse params['fax']
-    @success = @fax['status'] == 'success'
-
     fax_tag = @fax['tags']['user']
     begin
       user_id = db[:users].where(fax_tag: fax_tag).first[:id]
@@ -146,7 +144,7 @@ class PhaxMachineSinatra < Sinatra::Application
     ensure
       db.disconnect
     end
-    email_subject = "Sent fax #{@success ? 'succeeded' : 'failed'}"
+    email_subject = "Sent fax was a #{@fax['status']}"
 
     Pony.mail(
       to: email_addresses,
