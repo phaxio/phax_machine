@@ -60,7 +60,6 @@ class UsersController < ApplicationController
     def get_user_faxes
       received_faxes = Phaxio.list_faxes(search_params(:received))
       sent_faxes = Phaxio.list_faxes(search_params(:sent))
-
       error_responses = [received_faxes, sent_faxes].select { |response| !response['success'] }
       if error_responses.present?
         return error_responses.first
