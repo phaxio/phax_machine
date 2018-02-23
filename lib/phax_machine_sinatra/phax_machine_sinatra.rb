@@ -75,7 +75,7 @@ class PhaxMachineSinatra < Sinatra::Application
   end
 
   post '/mailgun' do
-    if not params['sender']
+    if not params['from']
       return [400, "Must include a sender"]
     elsif not params['recipient']
       return [400, "Must include a recipient"]
@@ -97,7 +97,8 @@ class PhaxMachineSinatra < Sinatra::Application
       i += 1
     end
 
-    sendFax(params['sender'], params['recipient'],files)
+    sender = Mail::AddressList.new(params['from']).addresses.first.address
+    sendFax(sender, params['recipient'],files)
     "OK"
   end
 
@@ -136,7 +137,7 @@ class PhaxMachineSinatra < Sinatra::Application
 
   post '/fax_sent' do
     @fax = JSON.parse params['fax']
-    @success = params['success']
+    @success = @fax['status'] == 'success'
 
     fax_tag = @fax['tags']['user']
     begin
@@ -164,13 +165,33 @@ class PhaxMachineSinatra < Sinatra::Application
 
     fax_id = params["fax_id"].to_i
     api_response = Phaxio.get_fax_file(id: fax_id, type: "p")
-    tempfile = Tempfile.new(['fax', '.pdf'])
-    IO.binwrite tempfile.path, api_response.body
-    logger.warn "Sending file with length #{File.size(tempfile.path)}"
-    send_file tempfile.path, disposition: :attachment
+    download_file(api_response)
+  end
+
+  delete '/faxes/:fax_id/file' do
+    protected!
+    set_phaxio_creds
+    api_response = Phaxio.delete_fax(id: params[:fax_id].to_i, files_only: true)
+
+    if request.xhr?
+      api_response.body
+    else
+      erb :logs
+    end
   end
 
   private
+
+    def download_file(api_response)
+      tempfile = Tempfile.new(['fax', '.pdf'])
+      IO.binwrite(tempfile.path, api_response.body)
+      logger.warn "Sending file with length #{File.size(tempfile.path)}"
+      if File.size(tempfile) > 68
+        send_file tempfile.path, disposition: :attachment
+      else
+        'Unable to download the file from Phaxio. It may be deleted due to your fax settings.'
+      end
+    end
 
     def set_phaxio_creds
       Phaxio.config do |config|
@@ -183,7 +204,9 @@ class PhaxMachineSinatra < Sinatra::Application
       set_phaxio_creds
 
       begin
-        user_id = db[:user_emails].where(email: fromEmail).first[:user_id]
+        user_id = db[:user_emails].where do |user|
+          {user.lower(:email) => fromEmail&.downcase}
+        end.first[:user_id]
         user = db[:users].where(id: user_id).first
         from_fax_number = user[:fax_number]
         fax_tag = user[:fax_tag]

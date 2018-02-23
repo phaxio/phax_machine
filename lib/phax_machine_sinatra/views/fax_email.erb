@@ -5,7 +5,7 @@
 <% end %>
 
 <p><b>ID:</b> <%= @fax["id"] %></p>
-<p><b>Status:</b> <%= @fax["status"] %>
+<p><b>Status:</b> <%= @fax["status"] %></p>
 <p><b>Number of Pages:</b> <%= @fax["num_pages"] %></p>
 <% if @fax["direction"] == "received" %>
   <p><b>To:</b> <%= @fax["to_number"] %></p>
