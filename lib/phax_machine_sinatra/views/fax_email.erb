@@ -1,14 +1,15 @@
 <% if @fax["direction"] == "received" %>
   <h1>You've received a new fax!</h1>
 <% else %>
-
 	<% if @fax["status"] == "success" %>
   	<h1>Your fax was sent successfully!</h1>
   <% else %>
   	<h1>Your fax failed</h1>
   <% end %>
-
 <% end %>
+
+<%= @fax %>
+
 
 <p><b>ID:</b> <%= @fax["id"] %></p>
 <p><b>Status:</b> <%= @fax["status"] %></p>
