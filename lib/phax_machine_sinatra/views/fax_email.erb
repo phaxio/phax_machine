@@ -8,6 +8,8 @@
   <% end %>
 <% end %>
 
+<%= @fax %>
+
 <p><b>ID:</b> <%= @fax["id"] %></p>
 <p><b>Status:</b> <%= @fax["status"] %></p>
 <p><b>Number of Pages:</b> <%= @fax["num_pages"] %></p>
@@ -25,7 +27,7 @@
       <p><b>Number:</b> <%= recipient["number"] %></p>
       <p><b>Status:</b> <%= recipient["status"] %></p>
       <% if @fax["status"] == "failure" %>
-				<p><b>Error Message:</b><%= recipient["error_code"] %></p>
+				<p><b>Error Message:</b> <%= recipient["error_code"] %></p>
 			<% end %>
     </div>
   <% end %>
