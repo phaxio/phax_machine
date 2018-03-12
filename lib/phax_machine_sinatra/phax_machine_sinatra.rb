@@ -272,13 +272,13 @@ class PhaxMachineSinatra < Sinatra::Application
 		def most_common_error(fax)
 			errors = {}
 			fax["recipients"].each do |recipient|
-			  if errors.has_key?(recipient["error_code"].downcase)
-			    errors["#{recipient["error_code"]}"]["frequency"] += 1
+			  key = recipient["error_code"].downcase
+			  if errors.has_key?(key)
+			    errors[key]["frequency"] += 1
 			  else
-			    errors["#{recipient["error_code"].downcase}"] = {"frequency" => 1}
+			    errors[key] = {"frequency" => 1}
 			  end
 			end
-			# max_by returns an array that looks like '["no answer, {frequency: 3}'
-			errors.max_by {|error_code, amount| amount["frequency"]}.shift
+		  errors.max_by {|error_code, amount| amount["frequency"]}.shift
 		end
 end
