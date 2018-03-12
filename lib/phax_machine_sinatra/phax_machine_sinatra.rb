@@ -272,7 +272,7 @@ class PhaxMachineSinatra < Sinatra::Application
 		def most_common_error(fax)
 			errors = {}
 			fax["recipients"].each do |recipient|
-			  key = recipient["error_code"].downcase
+			  key = recipient["error_code"]
 			  if errors.has_key?(key)
 			    errors[key]["frequency"] += 1
 			  else

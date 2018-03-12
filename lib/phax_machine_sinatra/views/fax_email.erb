@@ -4,18 +4,18 @@
 	<% if @fax["status"] == "success" %>
   	<h1>Your fax was sent successfully</h1>
   <% else %>
-  	<h1>Your fax failed because <%= @fax["most_common_error"] %></h1>
+  	<h1>Your fax failed because: <%= @fax["most_common_error"] %></h1>
   <% end %>
 <% end %>
 
 <p><b>ID:</b> <%= @fax["id"] %></p>
 <p><b>Status:</b> <%= @fax["status"] %></p>
 <p><b>Number of Pages:</b> <%= @fax["num_pages"] %></p>
-<% if @fax["status"] != "success" %>
-	<p><b>Most Common Error:</b> <%= @fax["most_common_error"] %></p>
-<% end %>
 <% if @fax["direction"] == "received" %>
   <p><b>To:</b> <%= @fax["to_number"] %></p>
+<% end %>
+<% if @fax["status"] != "success" %>
+	<p><b>Most Common Error:</b> <%= @fax["most_common_error"] %></p>
 <% end %>
 <p><b>From:</b> <%= @fax["direction"] == "received" ? @fax["from_number"] : @fax["caller_id"] %></p>
 
