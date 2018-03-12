@@ -147,8 +147,7 @@ class PhaxMachineSinatra < Sinatra::Application
     if @fax["status"] == "success"
     	email_subject = "Your fax was sent successfully"
     else
-    	error_message = isolate_errors(@fax)
-    	email_subject = "Your fax failed because #{error_message}"
+    	email_subject = "Your fax failed because #{most_common_error(@fax)}"
     end
 
     Pony.mail(
@@ -268,17 +267,15 @@ class PhaxMachineSinatra < Sinatra::Application
       @db ||= Sequel.connect(ENV["DATABASE_URL"])
     end
 
-    def isolate_errors(fax)
-    	errors = {}
-    	fax["recipients"].each do |recipient|
-    		if errors[recipient]["error_code"].downcase
-    			errors[recipient]["error_code"]["frequency"] += 1
-    		else
-    			errors[recipient]["error_code"].downcase = {"frequency" => 0 }
-    		end
-    	end
-    	p errors
-    	errors
-    end
-    # {"id"=>66780252, "num_pages"=>1, "cost"=>0, "direction"=>"sent", "status"=>"failure", "is_test"=>false, "requested_at"=>1520875041, "completed_at"=>1520875066, "caller_id"=>"2014167526", "recipients"=>[{"number"=>"+12242136849", "status"=>"failure", "error_id"=>112, "error_code"=>"No answer", "error_type"=>"lineError", "completed_at"=>1520875066}], "tags"=>{"user"=>"ec37f02b-c623-453f-97c1-a87e67e4b3c8"}}
+		def most_common_error(fax)
+			errors = {}
+			fax["recipients"].each do |recipient|
+			  if errors.has_key?(recipient["error_code"])
+			    errors["#{recipient["error_code"]}"]["frequency"] += 1
+			  else
+			    errors["#{recipient["error_code"]}"] = {"frequency" => 1}
+			  end
+			end 
+			errors.max_by {|error_code, amount| amount["frequency"]}.shift #max_by returns an array that looks like '["no answer, {frequency: 3}'
+		end
 end
