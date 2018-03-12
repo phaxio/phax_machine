@@ -267,13 +267,13 @@ class PhaxMachineSinatra < Sinatra::Application
       @db ||= Sequel.connect(ENV["DATABASE_URL"])
     end
 
-		def most_common_error(fax)
+		def most_common_error(fax) #if there are two error_codes with the same frequency of occurrance, the error found first (first recipient) takes precedence
 			errors = {}
 			fax["recipients"].each do |recipient|
-			  if errors.has_key?(recipient["error_code"])
+			  if errors.has_key?(recipient["error_code"].downcase)
 			    errors["#{recipient["error_code"]}"]["frequency"] += 1
 			  else
-			    errors["#{recipient["error_code"]}"] = {"frequency" => 1}
+			    errors["#{recipient["error_code"].downcase}"] = {"frequency" => 1}
 			  end
 			end 
 			errors.max_by {|error_code, amount| amount["frequency"]}.shift #max_by returns an array that looks like '["no answer, {frequency: 3}'
