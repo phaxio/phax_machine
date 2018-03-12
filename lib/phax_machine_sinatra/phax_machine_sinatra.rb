@@ -108,7 +108,7 @@ class PhaxMachineSinatra < Sinatra::Application
 
   post '/fax_received' do
     @fax = JSON.parse params['fax']
-
+    p @fax
     recipient_number = Phonelib.parse(@fax['to_number']).e164
     begin
       user_id = db[:users].where(fax_number: recipient_number).first[:id]
