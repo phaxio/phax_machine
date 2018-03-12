@@ -271,9 +271,10 @@ class PhaxMachineSinatra < Sinatra::Application
     def isolate_errors(fax)
     	errors = Hash.new(0)
     	fax["recipients"].each do |recipient|
-    		if recipient["error_code"] != nil
-    			errors[recipient]["error_code"].downcase += 1
-    		end
+    		p recipient["error_code"]
+    		# if recipient["error_code"] != nil
+    		# 	errors[recipient]["error_code"].downcase
+    		# end
     	end
     	errors
     end
