@@ -147,7 +147,8 @@ class PhaxMachineSinatra < Sinatra::Application
     if @fax["status"] == "success"
     	email_subject = "Your fax was sent successfully"
     else
-    	email_subject = "Your fax failed because #{most_common_error(@fax)}"
+    	@fax["most_common_error"] = most_common_error(@fax)
+    	email_subject = "Your fax failed because: #{@fax["most_common_error"]}"
     end
 
     Pony.mail(
@@ -267,7 +268,8 @@ class PhaxMachineSinatra < Sinatra::Application
       @db ||= Sequel.connect(ENV["DATABASE_URL"])
     end
 
-		def most_common_error(fax) #if there are two error_codes with the same frequency of occurrance, the error found first (first recipient) takes precedence
+		# if there are two error_codes with the same frequency of occurrance, the error found first (first recipient) takes precedence
+		def most_common_error(fax)
 			errors = {}
 			fax["recipients"].each do |recipient|
 			  if errors.has_key?(recipient["error_code"].downcase)
@@ -275,7 +277,8 @@ class PhaxMachineSinatra < Sinatra::Application
 			  else
 			    errors["#{recipient["error_code"].downcase}"] = {"frequency" => 1}
 			  end
-			end 
-			errors.max_by {|error_code, amount| amount["frequency"]}.shift #max_by returns an array that looks like '["no answer, {frequency: 3}'
+			end
+			# max_by returns an array that looks like '["no answer, {frequency: 3}'
+			errors.max_by {|error_code, amount| amount["frequency"]}.shift
 		end
 end
