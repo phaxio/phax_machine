@@ -2,14 +2,11 @@
   <h1>You've received a new fax!</h1>
 <% else %>
 	<% if @fax["status"] == "success" %>
-  	<h1>Your fax was sent successfully!</h1>
+  	<h1>Your fax was sent successfully</h1>
   <% else %>
   	<h1>Your fax failed</h1>
   <% end %>
 <% end %>
-
-<%= @fax %>
-
 
 <p><b>ID:</b> <%= @fax["id"] %></p>
 <p><b>Status:</b> <%= @fax["status"] %></p>
@@ -19,10 +16,6 @@
 <% end %>
 <p><b>From:</b> <%= @fax["direction"] == "received" ? @fax["from_number"] : @fax["caller_id"] %></p>
 
-<% if @fax["status"] == "failed" %>
-	<p><b>Error Message:</b><%= @fax["error_message"] %></p>
-<% end %>
-
 <% if @fax["direction"] == "received" %>
   <p>The document has been attached to this email.</p>
 <% else %>
@@ -31,6 +24,9 @@
     <div class="recipient">
       <p><b>Number:</b> <%= recipient["number"] %></p>
       <p><b>Status:</b> <%= recipient["status"] %></p>
+      <% if @fax["status"] == "failure" %>
+				<p><b>Error Message:</b><%= recipient["error_code"] %></p>
+			<% end %>
     </div>
   <% end %>
 <% end %>
