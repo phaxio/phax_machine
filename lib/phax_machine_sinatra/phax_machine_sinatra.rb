@@ -144,7 +144,12 @@ class PhaxMachineSinatra < Sinatra::Application
       db.disconnect
     end
 
-    @fax["status"] == "success" ? email_subject = "Your fax was sent successfully" : email_subject = "Your fax failed"
+    if @fax["status"] == "success"
+    	email_subject = "Your fax was sent successfully"
+    else
+    	error_message = isolate_errors(@fax)
+    	email_subject = "Your fax failed because #{error_message}"
+    end
 
     Pony.mail(
       to: email_addresses,
@@ -261,5 +266,15 @@ class PhaxMachineSinatra < Sinatra::Application
 
     def db
       @db ||= Sequel.connect(ENV["DATABASE_URL"])
+    end
+
+    def isolate_errors(fax)
+    	errors = Hash.new(0)
+    	fax["recipients"].each do |recipient|
+    		if recipient["error_code"] != nil
+    			errors[recipient]["error_code"].downcase += 1
+    		end
+    	end
+    	errors
     end
 end

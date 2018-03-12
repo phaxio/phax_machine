@@ -24,7 +24,7 @@
     <div class="recipient">
       <p><b>Number:</b> <%= recipient["number"] %></p>
       <p><b>Status:</b> <%= recipient["status"] %></p>
-      <% if @fax["status"] == "failure" %>
+      <% if @fax["status"] != "success" %>
 				<p><b>Error Message:</b> <%= recipient["error_code"] %></p>
 			<% end %>
     </div>
