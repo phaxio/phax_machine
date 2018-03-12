@@ -14,10 +14,10 @@
 <% if @fax["direction"] == "received" %>
   <p><b>To:</b> <%= @fax["to_number"] %></p>
 <% end %>
+<p><b>From:</b> <%= @fax["direction"] == "received" ? @fax["from_number"] : @fax["caller_id"] %></p>
 <% if @fax["status"] != "success" %>
 	<p><b>Most Common Error:</b> <%= @fax["most_common_error"] %></p>
 <% end %>
-<p><b>From:</b> <%= @fax["direction"] == "received" ? @fax["from_number"] : @fax["caller_id"] %></p>
 
 <% if @fax["direction"] == "received" %>
   <p>The document has been attached to this email.</p>
