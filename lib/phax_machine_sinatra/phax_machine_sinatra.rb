@@ -108,7 +108,6 @@ class PhaxMachineSinatra < Sinatra::Application
 
   post '/fax_received' do
     @fax = JSON.parse params['fax']
-
     recipient_number = Phonelib.parse(@fax['to_number']).e164
     begin
       user_id = db[:users].where(fax_number: recipient_number).first[:id]
@@ -144,7 +143,13 @@ class PhaxMachineSinatra < Sinatra::Application
     ensure
       db.disconnect
     end
-    email_subject = "Sent fax was a #{@fax['status']}"
+
+    if @fax["status"] == "success"
+    	email_subject = "Your fax was sent successfully"
+    else
+    	@fax["most_common_error"] = most_common_error(@fax)
+    	email_subject = "Your fax failed because: #{@fax["most_common_error"]}"
+    end
 
     Pony.mail(
       to: email_addresses,
@@ -262,4 +267,18 @@ class PhaxMachineSinatra < Sinatra::Application
     def db
       @db ||= Sequel.connect(ENV["DATABASE_URL"])
     end
+
+		# if there are two error_codes with the same frequency of occurrance, the error found first (first recipient) takes precedence
+		def most_common_error(fax)
+			errors = {}
+			fax["recipients"].each do |recipient|
+			  key = recipient["error_code"]
+			  if errors.has_key?(key)
+			    errors[key]["frequency"] += 1
+			  else
+			    errors[key] = {"frequency" => 1}
+			  end
+			end
+		  errors.max_by {|error_code, amount| amount["frequency"]}.shift
+		end
 end
