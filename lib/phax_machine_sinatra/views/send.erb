@@ -2,21 +2,30 @@
 	<h1>Send a Fax</h1>
 
 	<form enctype="multipart/form-data" id="sendFaxForm">
-		<div class="form-group">
-			<label for="to">To</label>
-			<input id="to" name="to" type="tel" placeholder="+15558675309" class="form-control" required>
+		<div class="form-group row">
+			<div class="col-md-9">
+				<label for="to">To</label>
+				<input id="to" name="to" type="tel" placeholder="+15558675309" class="form-control" required>
+			</div>
+			<div class="col-md-3 btn-inline">
+				<label for="to" id="remaining-files">Maximum of 10 Files</label>
+				<button type="button" id="send-another" class="btn btn-success">Attach Another File</button>
+				<button type="submit" value="Upload" class="btn btn-primary">Send Fax</button>
+			</div>
 		</div>
 
-		<div class="form-group">
-			<label>File</label>
-			<div class="file-drop" data-target="#faxFile">
-				<h3>Drag a file onto this box to upload it.</h3>
-				<input id="faxFile" name="file" type="file" required>
+		<div id="all-files">
+			<div id="file1" class="form-group file-attachments">
+				<label>File</label>
+				<div class="file-drop" data-target="#faxFile1">
+					<h3>Drag a file onto this box to upload it.</h3>
+					<input id="faxFile1" name="files[file1]" type="file" required>
+				</div>
+
+				<div class="faxFileProgress" hidden="hidden">
+				</div>
 			</div>
 
-			<div id="faxFileProgress" hidden="hidden"></div>
 		</div>
-
-		<button type="submit" value="Upload" class="btn btn-primary">Send</button>
 	</form>
 </main>
