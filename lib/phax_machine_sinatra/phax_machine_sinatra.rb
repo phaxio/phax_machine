@@ -52,7 +52,7 @@ class PhaxMachineSinatra < Sinatra::Application
 
     api_response = Phaxio.send_fax(
       to: params['to'],
-      filename: params['file']['tempfile']
+    	filename: params['files'].keys.map { |key| params['files'][key]['tempfile'] }
     )
     api_response.body
   end
