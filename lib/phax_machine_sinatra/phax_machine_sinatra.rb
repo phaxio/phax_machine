@@ -5,6 +5,7 @@ require 'pony'
 require 'json'
 require 'tempfile'
 require 'sequel'
+require 'erb'
 
 if ENV['RACK_ENV'] == 'development'
   require 'dotenv'
@@ -50,10 +51,32 @@ class PhaxMachineSinatra < Sinatra::Application
     protected!
     set_phaxio_creds
 
-    api_response = Phaxio.send_fax(
-      to: params['to'],
-      filename: params['file']['tempfile']
+    cover_page_path = File.expand_path(
+      File.join('..', 'views', 'cover_page.erb'),
+      __FILE__
     )
+    cover_page_template = ERB.new File.read(cover_page_path)
+    cover_page_file = Tempfile.new(['cover_page', '.html'])
+
+    begin
+      cover_page_file.write cover_page_template.result_with_hash({
+        test_string: 'This is a test'
+      })
+      cover_page_file.rewind
+
+      api_response = Phaxio.send_fax(
+        to: params['to'],
+        filename: [
+          cover_page_file,
+          params['file']['tempfile']
+        ]
+      )
+    rescue => error
+      cover_page_file.close
+      cover_page_file.unlink
+      raise error
+    end
+
     api_response.body
   end
 
