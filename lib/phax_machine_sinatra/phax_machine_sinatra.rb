@@ -50,9 +50,11 @@ class PhaxMachineSinatra < Sinatra::Application
     protected!
     set_phaxio_creds
 
+    files = params['files'].keys.map { |key| params['files'][key]['tempfile'] }.reverse
+
     api_response = Phaxio.send_fax(
       to: params['to'],
-      filename: params['file']['tempfile']
+      filename: files
     )
     api_response.body
   end
