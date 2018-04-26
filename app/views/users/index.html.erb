@@ -8,7 +8,7 @@
   <thead>
     <th>Edit</th>
     <th>Emails</th>
-    <th>Fax Number</th>
+    <th>Fax Numbers</th>
   </thead>
   <tbody>
     <% @users.each do |user| %>
@@ -21,7 +21,11 @@
             <% end %>
           <% end %>
         </td>
-        <td><%= user.fax_number %></td>
+        <td>
+	        <% user.user_fax_numbers.each do |user_fax_number| %>
+	        	<span class="user-fax-number"><%= user_fax_number.fax_number %></span>
+	        <% end %>
+      	</td>
       </tr>
     <% end %>
   </tbody>

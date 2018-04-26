@@ -1,7 +1,7 @@
 class User < ApplicationRecord
 
   has_many :user_emails, dependent: :destroy
-  has_many :user_fax_numbers, through: :user_emails, dependent: :destroy
+  has_many :user_fax_numbers, dependent: :destroy
   
   accepts_nested_attributes_for :user_emails, allow_destroy: true
   accepts_nested_attributes_for :user_fax_numbers, allow_destroy: true

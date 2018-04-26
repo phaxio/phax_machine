@@ -2,7 +2,6 @@ class CreateUserFaxNumbers < ActiveRecord::Migration[5.1]
   def up
     create_table :user_fax_numbers do |t|
     	t.references :user, null: false
-    	t.references :user_email, null: false
     	t.string :fax_number, null: false
     	t.timestamps
     end

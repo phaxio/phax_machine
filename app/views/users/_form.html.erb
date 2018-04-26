@@ -31,12 +31,26 @@
   </div>
 
   <div class="form-group">
-    <%= f.label :fax_number, 'Fax Number' %>
-    <small class="text-muted">
-      The fax number in your Phaxio account to be used by this user for sending and receiving faxes.
-      Should be in e164 format (i.e. +15558675309).
-    </small>
-    <%= f.phone_field :fax_number, required: true, class: 'form-control' %>
+    <%= f.label :user_fax_numbers, 'Fax Numbers' %>
+    <div id="userFaxNumberList">
+	    <small class="text-muted">
+	      The fax number(s) in your Phaxio account to be used by this user for sending and receiving faxes.
+	      Should be in e164 format (i.e. +15558675309).
+	    </small>
+	    <%= f.fields_for :user_fax_numbers do |n| %>
+	    	<div class="input-group">
+		    	<%= n.hidden_field :_destroy, class: 'destroy-field' %>
+		    	<%= n.phone_field :fax_number, required: true, class: 'form-control' %>
+		    	<span class="input-group-btn">
+	          <a class="btn btn-secondary btn-remove-tel">
+	            <i class="glyphicon glyphicon-trash"></i>
+	          </a>
+	        </span>
+		  	</div>
+    	<% end %>
+    </div>
+	  <br>
+    <a id="addUserFaxNumber" class="btn btn-sm btn-success">Add</a>
   </div>
 
   <%= f.submit 'Submit', class: 'btn btn-primary' %>
