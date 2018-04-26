@@ -3,7 +3,7 @@ class UserEmail < ApplicationRecord
 
   validates :email,
     presence: true,
-    uniqueness: {case_sensitive: false},
+    # uniqueness: {case_sensitive: false},
     length: {maximum: 60},
     email: true
 end
