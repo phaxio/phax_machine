@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171017190006) do
+ActiveRecord::Schema.define(version: 20180426153655) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,8 +24,17 @@ ActiveRecord::Schema.define(version: 20171017190006) do
     t.index ["user_id"], name: "index_user_emails_on_user_id"
   end
 
-  create_table "users", force: :cascade do |t|
+  create_table "user_fax_numbers", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "user_email_id", null: false
     t.string "fax_number", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_email_id"], name: "index_user_fax_numbers_on_user_email_id"
+    t.index ["user_id"], name: "index_user_fax_numbers_on_user_id"
+  end
+
+  create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "fax_tag", null: false
