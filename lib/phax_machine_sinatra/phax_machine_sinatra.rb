@@ -114,7 +114,9 @@ class PhaxMachineSinatra < Sinatra::Application
     begin
       user_id = db[:user_fax_numbers].where(fax_number: recipient_number).first[:id]
       p user_id
-      email_addresses = db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
+      email_addresses = db[:user_emails].where(user_id: user_id)
+      p email_addresses
+      email_addresses = email_addresses.all.map { |user_email| user_email[:email] }
       p email_addresses
     ensure
       db.disconnect
@@ -139,14 +141,12 @@ class PhaxMachineSinatra < Sinatra::Application
   end
 
   post '/fax_sent' do
-  	p "/FAX SENT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
     @fax = JSON.parse params['fax']
     fax_tag = @fax['tags']['user']
+
     begin
       user_id = db[:users].where(fax_tag: fax_tag).first[:id]
-      p user_id
       email_addresses = db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
-      p email_addresses
     ensure
       db.disconnect
     end
@@ -275,16 +275,12 @@ class PhaxMachineSinatra < Sinatra::Application
       @db ||= Sequel.connect(ENV["DATABASE_URL"])
     end
 
-		# if there are two error_codes with the same frequency of occurrance, the error found first (first recipient) takes precedence
+		# if two error_codes have the same frequency, the error found first (first recipient) takes precedence
 		def most_common_error(fax)
 			errors = {}
 			fax["recipients"].each do |recipient|
 			  key = recipient["error_code"]
-			  if errors.has_key?(key)
-			    errors[key]["frequency"] += 1
-			  else
-			    errors[key] = {"frequency" => 1}
-			  end
+			  errors.has_key?(key) ? errors[key]["frequency"] += 1 : errors[key] = {"frequency" => 1}
 			end
 		  errors.max_by {|error_code, amount| amount["frequency"]}.shift
 		end
