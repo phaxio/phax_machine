@@ -221,7 +221,7 @@ class PhaxMachineSinatra < Sinatra::Application
         p "==================================================================================="
         p user
         p "==================================================================================="
-        from_fax_number = user.user_fax_numbers.first.fax_number
+        from_fax_number = db[:user_fax_numbers]
         fax_tag = user[:fax_tag]
       ensure
         db.disconnect
