@@ -225,8 +225,11 @@ class PhaxMachineSinatra < Sinatra::Application
       end
 
       p "user_id"
+      p user_id
       p "from_fax_number"
+      p from_fax_number
       p "fax_tag"
+      p fax_tag
 
       number = Mail::Address.new(toEmail).local
 
@@ -238,6 +241,8 @@ class PhaxMachineSinatra < Sinatra::Application
 
       logger.info "#{fromEmail} is attempting to send #{filenames.length} files to #{number}..."
       result = Phaxio.send_fax(options)
+      p "Phaxio.send_fax(options) result ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
+      p result
       result = JSON.parse result.body
 
       if result['success']
