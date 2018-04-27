@@ -222,6 +222,7 @@ class PhaxMachineSinatra < Sinatra::Application
         p user
         p "==================================================================================="
         from_fax_number = db[:user_fax_numbers].where(user_id: user_id).first
+        p from_fax_number
         fax_tag = user[:fax_tag]
       ensure
         db.disconnect
@@ -236,7 +237,7 @@ class PhaxMachineSinatra < Sinatra::Application
 
       number = Mail::Address.new(toEmail).local
 
-      options = {to: number, caller_id: from_fax_number, :"tag[user]" => fax_tag}
+      options = {to: number, caller_id: from_fax_number[:fax_number], :"tag[user]" => fax_tag}
 
       filenames.each_index do |idx|
         options["filename[#{idx}]"] = File.new(filenames[idx])
