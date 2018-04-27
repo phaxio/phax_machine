@@ -7,7 +7,6 @@ PhaxMachine.pages['user-detail-page'] = {
 
   render: function(){
     this.data.userId = this.getUserFaxListElement().dataset.userId;
-
     if (this.getUserFaxListElement() !== null){
       this.userFaxList = new Vue({
         el: '#userFaxList',
@@ -55,7 +54,6 @@ PhaxMachine.pages['user-detail-page'] = {
         }
       });
     };
-
     this.getUserFaxes();
   },
 
@@ -70,7 +68,7 @@ PhaxMachine.pages['user-detail-page'] = {
   getUserFaxes: function(){
     $.getJSON(this.userDataPath())
       .done(this.updateUserFaxList())
-      .fail(this.retryGetUserFaxes);
+      .fail(this.retryGetUserFaxes)
   },
 
   updateUserFaxList: function(){
