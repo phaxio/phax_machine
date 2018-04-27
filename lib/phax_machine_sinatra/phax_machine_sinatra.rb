@@ -224,6 +224,10 @@ class PhaxMachineSinatra < Sinatra::Application
         db.disconnect
       end
 
+      p "user_id"
+      p "from_fax_number"
+      p "fax_tag"
+
       number = Mail::Address.new(toEmail).local
 
       options = {to: number, caller_id: from_fax_number, :"tag[user]" => fax_tag}
