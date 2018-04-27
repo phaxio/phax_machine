@@ -218,7 +218,10 @@ class PhaxMachineSinatra < Sinatra::Application
           {user.lower(:email) => fromEmail&.downcase}
         end.first[:user_id]
         user = db[:users].where(id: user_id).first
-        from_fax_number = user[:fax_number]
+        p "==================================================================================="
+        p user
+        p "==================================================================================="
+        from_fax_number = user.fax_number
         fax_tag = user[:fax_tag]
       ensure
         db.disconnect
