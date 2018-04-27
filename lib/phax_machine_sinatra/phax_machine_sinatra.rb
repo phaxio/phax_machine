@@ -117,11 +117,11 @@ class PhaxMachineSinatra < Sinatra::Application
     #   db.disconnect
     # end
     begin
-      user_ids = db[:user_fax_numbers].where(fax_number: recipient_number)[:id]
-      p user_ids
+      user_ids = db[:user_fax_numbers].where(fax_number: recipient_number)
+      user_ids = user_ids.map { |user_id| user_id[:id] } 
 
       email_addresses = user_ids.map do |user_id|
-      	db[:user_emails].where(user_id: user_id[:id]).all.map { |user_email| user_email[:email] }
+      	db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
       end
       p email_addresses
     ensure
