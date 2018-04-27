@@ -75,8 +75,6 @@ class PhaxMachineSinatra < Sinatra::Application
   end
 
   post '/mailgun' do
-  	p "/MAILGUN ================================="
-  	p params
     if not params['from']
       return [400, "Must include a sender"]
     elsif not params['recipient']
@@ -109,11 +107,15 @@ class PhaxMachineSinatra < Sinatra::Application
   end
 
   post '/fax_received' do
+  	p "/FAX RECIEVED ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
     @fax = JSON.parse params['fax']
     recipient_number = Phonelib.parse(@fax['to_number']).e164
+    p recipient_number
     begin
       user_id = db[:user_fax_numbers].where(fax_number: recipient_number).first[:id]
+      p user_id
       email_addresses = db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
+      p email_addresses
     ensure
       db.disconnect
     end
@@ -137,11 +139,14 @@ class PhaxMachineSinatra < Sinatra::Application
   end
 
   post '/fax_sent' do
+  	p "/FAX SENT ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
     @fax = JSON.parse params['fax']
     fax_tag = @fax['tags']['user']
     begin
       user_id = db[:users].where(fax_tag: fax_tag).first[:id]
+      p user_id
       email_addresses = db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
+      p email_addresses
     ensure
       db.disconnect
     end
