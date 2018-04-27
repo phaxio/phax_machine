@@ -111,8 +111,12 @@ class PhaxMachineSinatra < Sinatra::Application
     recipient_number = Phonelib.parse(@fax['to_number']).e164
 
     begin
-      user_id = db[:user_fax_numbers].where(fax_number: recipient_number).to_hash
-      p user_id
+      user_id = db[:user_fax_numbers].where(fax_number: recipient_number).all
+      user_ids = user_id.map do |user_id| 
+      	p user_id
+      	p user_id[:user_id]
+      	user_id[:user_id]
+      end
       email_addresses = db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
       p email_addresses
     ensure
