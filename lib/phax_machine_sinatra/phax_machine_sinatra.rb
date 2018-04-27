@@ -115,7 +115,7 @@ class PhaxMachineSinatra < Sinatra::Application
       user_id = db[:user_fax_numbers].where(fax_number: recipient_number).first[:id]
       p user_id
       email_addresses = db[:user_emails].where(user_id: user_id)
-      p email_addresses
+      p email_addresses.ethods.sort!
       email_addresses = email_addresses.all.map { |user_email| user_email[:email] }
       p email_addresses
     ensure
