@@ -112,8 +112,8 @@ class PhaxMachineSinatra < Sinatra::Application
 
     begin
       user_id = db[:user_fax_numbers].where(fax_number: recipient_number)
-      p user_id[:id]
       p user_id
+      p user_id.keys
       email_addresses = db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
       p email_addresses
     ensure
