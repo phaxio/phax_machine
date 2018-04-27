@@ -110,24 +110,10 @@ class PhaxMachineSinatra < Sinatra::Application
   	p "/FAX RECIEVED ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
     @fax = JSON.parse params['fax']
     recipient_number = Phonelib.parse(@fax['to_number']).e164
-    # begin
-    #   user_id = db[:user_fax_numbers].where(fax_number: recipient_number).first[:id]
-    #   email_addresses = db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
-    # ensure
-    #   db.disconnect
-    # end
     begin
-      user_ids = db[:user_fax_numbers].where(fax_number: recipient_number)
-      user_ids = user_ids.map { |user_id| user_id[:id] } 
-      p user_ids
-      email_addresses = user_ids.map do |user_id|
-      	p user_id
-      	db[:user_emails].where(user_id: user_id).all.map do |user_email|
-      		p user_email
-      		user_email[:email] 
-      	end
-      end
-      p email_addresses
+      user_id = db[:user_fax_numbers].where(fax_number: recipient_number).first[:id]
+      p user_id
+      email_addresses = db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
     ensure
       db.disconnect
     end
