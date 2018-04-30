@@ -240,6 +240,8 @@ class PhaxMachineSinatra < Sinatra::Application
       number = Mail::Address.new(toEmail).local
 
       options = {to: number, caller_id: from_fax_number[:fax_number], :"tag[user]" => fax_tag}
+      p "OPTIONS HASH IN sendFax"
+      p options
 
       filenames.each_index do |idx|
         options["filename[#{idx}]"] = File.new(filenames[idx])
