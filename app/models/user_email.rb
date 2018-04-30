@@ -1,6 +1,5 @@
 class UserEmail < ApplicationRecord
   belongs_to :user
-  has_many :user_fax_numbers
 
   validates :email,
     presence: true,

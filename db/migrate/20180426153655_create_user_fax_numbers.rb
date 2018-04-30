@@ -6,9 +6,11 @@ class CreateUserFaxNumbers < ActiveRecord::Migration[5.1]
     	t.timestamps
     end
 
-    User.find_each do |user|
-    	fax_number = UserFaxNumber.create!(fax_number: user.fax_number, user_id: user.id, user_fax_number_id: user.user_fax_number.id)
-    end
+    # TO DO: HOW TO WRITE THIS PROPERLY
+    #-----------------------------------
+    # User.find_each do |user|
+    # 	fax_number = UserFaxNumber.create!(fax_number: user.fax_number, user_id: user.id)
+    # end
 
     remove_column :users, :fax_number
   end
