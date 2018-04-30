@@ -98,10 +98,6 @@ class PhaxMachineSinatra < Sinatra::Application
     end
 
     sender = Mail::AddressList.new(params['from']).addresses.first.address
-    p "SENDER ==================================================================="
-    p sender
-    p "PARAMS ==================================================================="
-    p params
     sendFax(sender, params['recipient'], files)
     "OK"
   end
@@ -152,13 +148,19 @@ class PhaxMachineSinatra < Sinatra::Application
     fax_tag = @fax['tags']['user']
 
     begin
-      user_id = db[:users].where(fax_tag: fax_tag).first[:id]
+      # user_id = db[:users].where(fax_tag: fax_tag).first[:id]
 
       user_ids = db[:users].where(fax_tag: fax_tag).all.map {|user| user[:id]}
       p "FAX SENT USER_IDS"
       p user_ids.inspect
+      email_addresses = []
 
-      email_addresses = db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
+      user_ids.each do |user_id|
+      	email_addresses << db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
+      end
+      email_addresses = email_addresses.flatten!
+      p email_addresses
+      # email_addresses = db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
     ensure
       db.disconnect
     end
@@ -229,13 +231,9 @@ class PhaxMachineSinatra < Sinatra::Application
         user_id = db[:user_emails].where do |user|
           {user.lower(:email) => fromEmail&.downcase}
         end.first[:user_id]
-        p user_id
         user = db[:users].where(id: user_id).first
-        p user
         from_fax_number = db[:user_fax_numbers].where(user_id: user_id).first
-        p from_fax_number
         fax_tag = user[:fax_tag]
-        p fax_tag
       ensure
         db.disconnect
       end
