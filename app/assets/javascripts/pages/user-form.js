@@ -40,13 +40,15 @@ PhaxMachine.pages['user-form'] = {
             $('#userFaxNumberList').append(inputFaxGroup);
         });
 
+        // Matt again, these two functions could probably use the same class and work but again
+        // I'm ignorant of Vue and don't want to mess anything up
         $(document).on('click', '.btn-remove-email', function() {
             var inputGroup = $(this).closest('.input-group');
             inputGroup.find('input[type="email"]').val('pending@deletion.com')
             inputGroup.find('.destroy-field').val(true)
             inputGroup.hide();
         });
-
+        
         $(document).on('click', '.btn-remove-tel', function() {
             var inputFaxGroup = $(this).closest('.input-group');
             inputFaxGroup.find('input[type="tel"]').val('12223334444')

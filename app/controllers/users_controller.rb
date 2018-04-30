@@ -7,8 +7,8 @@ class UsersController < ApplicationController
 
   def new
     @user = User.new
-    @user.user_fax_numbers.build
     @user.user_emails.build
+    @user.user_fax_numbers.build
   end
 
   def show

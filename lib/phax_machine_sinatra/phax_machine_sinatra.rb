@@ -119,9 +119,6 @@ class PhaxMachineSinatra < Sinatra::Application
       	email_addresses << db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
       end
       email_addresses = email_addresses.flatten!
-      p "FAX RECEIVED EMAILS"
-      p email_addresses
-      # email_addresses = db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
     ensure
       db.disconnect
     end
@@ -149,17 +146,12 @@ class PhaxMachineSinatra < Sinatra::Application
     fax_tag = @fax['tags']['user']
 
     begin
-      # user_id = db[:users].where(fax_tag: fax_tag).first[:id]
       user_ids = db[:users].where(fax_tag: fax_tag).all.map {|user| user[:id]}
-
-      p "FAX SENT EMAILS"
       email_addresses = []
       user_ids.each do |user_id|
       	email_addresses << db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
       end
       email_addresses = email_addresses.flatten!
-      # email_addresses = db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
-      p email_addresses
     ensure
       db.disconnect
     end
@@ -240,8 +232,6 @@ class PhaxMachineSinatra < Sinatra::Application
       number = Mail::Address.new(toEmail).local
 
       options = {to: number, caller_id: from_fax_number[:fax_number], :"tag[user]" => fax_tag}
-      p "OPTIONS HASH IN sendFax"
-      p options
 
       filenames.each_index do |idx|
         options["filename[#{idx}]"] = File.new(filenames[idx])

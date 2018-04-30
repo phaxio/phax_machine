@@ -14,10 +14,10 @@
   <div class="form-group">
     <%= f.label :emails %>
     <div id="userEmailList">
-      <%= f.fields_for :user_emails do |e| %>
+      <%= f.fields_for :user_emails do |email| %>
         <div class="input-group">
-          <%= e.hidden_field :_destroy, class: 'destroy-field' %>
-          <%= e.email_field :email, required: true, class: 'form-control' %>
+          <%= email.hidden_field :_destroy, class: 'destroy-field' %>
+          <%= email.email_field :email, required: true, class: 'form-control' %>
           <span class="input-group-btn">
             <a class="btn btn-secondary btn-remove-email">
               <i class="glyphicon glyphicon-trash"></i>
@@ -37,10 +37,10 @@
 	      The fax number(s) in your Phaxio account to be used by this user for sending and receiving faxes.
 	      Should be in e164 format (i.e. +15558675309).
 	    </small>
-	    <%= f.fields_for :user_fax_numbers do |n| %>
+	    <%= f.fields_for :user_fax_numbers do |fax_number| %>
 	    	<div class="input-group">
-		    	<%= n.hidden_field :_destroy, class: 'destroy-field' %>
-		    	<%= n.phone_field :fax_number, required: true, class: 'form-control' %>
+		    	<%= fax_number.hidden_field :_destroy, class: 'destroy-field' %>
+		    	<%= fax_number.phone_field :fax_number, required: true, class: 'form-control' %>
 		    	<span class="input-group-btn">
 	          <a class="btn btn-secondary btn-remove-tel">
 	            <i class="glyphicon glyphicon-trash"></i>
