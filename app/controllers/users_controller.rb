@@ -50,7 +50,7 @@ class UsersController < ApplicationController
 
   private
     def user_params
-      params.require(:user).permit( {user_fax_numbers_attributes: [:fax_number, :_destroy, :id}, {user_emails_attributes: [:email, :id, :_destroy} )
+      params.require(:user).permit( {user_fax_numbers_attributes: [:fax_number, :_destroy, :id]}, {user_emails_attributes: [:email, :id, :_destroy]} )
     end
 
     def set_user
