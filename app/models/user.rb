@@ -1,5 +1,4 @@
 class User < ApplicationRecord
-
   has_many :user_emails, dependent: :destroy
   has_many :user_fax_numbers, dependent: :destroy
   

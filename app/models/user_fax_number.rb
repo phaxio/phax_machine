@@ -1,8 +1,7 @@
 class UserFaxNumber < ApplicationRecord
-	
-	has_many :users
+	belongs_to :user
 
-  validates :fax_number, presence: true, length: {maximum: 60}, phone: {possible: true}
+  validates :fax_number, length: {maximum: 60}, phone: {possible: true}, presence: true
 
 	before_save :format_fax_number
 
