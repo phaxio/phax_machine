@@ -155,7 +155,7 @@ class PhaxMachineSinatra < Sinatra::Application
       p "FAX SENT EMAILS"
       email_addresses = []
       user_ids.each do |user_id|
-      	email_addresses << db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }.uniq
+      	email_addresses << db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
       end
       email_addresses = email_addresses.flatten!
       # email_addresses = db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
