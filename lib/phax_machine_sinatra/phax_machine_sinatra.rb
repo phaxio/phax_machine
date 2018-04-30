@@ -119,6 +119,7 @@ class PhaxMachineSinatra < Sinatra::Application
       	email_addresses << db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
       end
       email_addresses = email_addresses.flatten!
+      p "FAX RECEIVED EMAILS"
       p email_addresses
       # email_addresses = db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
     ensure
@@ -149,18 +150,16 @@ class PhaxMachineSinatra < Sinatra::Application
 
     begin
       # user_id = db[:users].where(fax_tag: fax_tag).first[:id]
-
       user_ids = db[:users].where(fax_tag: fax_tag).all.map {|user| user[:id]}
-      p "FAX SENT USER_IDS"
-      p user_ids.inspect
-      email_addresses = []
 
+      p "FAX SENT EMAILS"
+      email_addresses = []
       user_ids.each do |user_id|
-      	email_addresses << db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
+      	email_addresses << db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }.uniq
       end
       email_addresses = email_addresses.flatten!
-      p email_addresses
       # email_addresses = db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
+      p email_addresses
     ensure
       db.disconnect
     end
