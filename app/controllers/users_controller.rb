@@ -28,7 +28,6 @@ class UsersController < ApplicationController
     if @user.save
       redirect_to users_path, notice: 'User added successfully.'
     else
-    	p @user.errors
       render :new
     end
   end
@@ -51,7 +50,7 @@ class UsersController < ApplicationController
 
   private
     def user_params
-      params.require(:user).permit( {user_fax_numbers_attributes: [:fax_number, :_destroy, :id, :user_email_id]}, {user_emails_attributes: [:email, :id, :_destroy, :user_fax_number]} )
+      params.require(:user).permit( {user_fax_numbers_attributes: [:fax_number, :_destroy, :id}, {user_emails_attributes: [:email, :id, :_destroy} )
     end
 
     def set_user
