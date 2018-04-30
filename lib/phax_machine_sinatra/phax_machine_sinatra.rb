@@ -98,6 +98,10 @@ class PhaxMachineSinatra < Sinatra::Application
     end
 
     sender = Mail::AddressList.new(params['from']).addresses.first.address
+    p "SENDER ==================================================================="
+    p sender
+    p "PARAMS ==================================================================="
+    p params
     sendFax(sender, params['recipient'], files)
     "OK"
   end
@@ -114,16 +118,13 @@ class PhaxMachineSinatra < Sinatra::Application
       user_ids = db[:user_fax_numbers].where(fax_number: recipient_number).all.map do |user_fax_number| 
       	user_fax_number[:user_id]
       end
-      p "THE USER_IDS --------------------------------------------------------------"
-      p user_ids
       email_addresses = []
       user_ids.each do |user_id|
-      	p user_id
       	email_addresses << db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
       end
       email_addresses = email_addresses.flatten!
-      # email_addresses = db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
       p email_addresses
+      # email_addresses = db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
     ensure
       db.disconnect
     end
