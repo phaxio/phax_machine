@@ -23,10 +23,6 @@ class UsersController < ApplicationController
   end
 
   def create
-  	#{ "user"=>{"user_emails_attributes"=>{"0"=>{"_destroy"=>"false", "email"=>"matt+v2runscopeprod@phaxio.com"}, "1"=>{"email"=>"matt@phaxio.com", "_destroy"=>"false"}}, 
-  	#"user_fax_numbers_attributes"=>{"0"=>{"_destroy"=>"false", "fax_number"=>"18777115706"}, "1"=>{"fax_number"=>"12096904545", "_destroy"=>"false"}}}, "commit"=>"Submit", "controller"=>"users", "action"=>"create" }
-
-  	p params
     @user = User.new user_params
 
     if @user.save
