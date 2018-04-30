@@ -223,10 +223,10 @@ class PhaxMachineSinatra < Sinatra::Application
       begin
         user_id = db[:user_emails].where do |user|
           {user.lower(:email) => fromEmail&.downcase}
-        end.all[:user_id]
+        end.first[:user_id]
         p "SEND FAX METHOD"
         p user_id
-        user = db[:users].where(id: user_id).first
+        user = db[:users].where(id: user_id).all
         from_fax_number = db[:user_fax_numbers].where(user_id: user_id).first
         fax_tag = user[:fax_tag]
       ensure
