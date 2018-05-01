@@ -227,6 +227,7 @@ class PhaxMachineSinatra < Sinatra::Application
         p 'from_fax_numbers'
         p from_fax_numbers.inspect
         from_fax_number = from_fax_numbers.select { |fax_number, value| fax_number[:primary_number] == true }
+        from_fax_number = from_fax_number.pop
       	p "from_fax_number"
         p from_fax_number.inspect
         # from_fax_number = from_fax_numbers.select { |fax_number, value| fax_number[:primary_number] }
