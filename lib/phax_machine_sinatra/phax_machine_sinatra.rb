@@ -221,7 +221,7 @@ class PhaxMachineSinatra < Sinatra::Application
       begin
         user_ids = db[:user_emails].where do |user|
           {user.lower(:email) => fromEmail&.downcase}
-        end.all[:user_id]
+        end.all
         p "user_ids"
         p user_ids.inspect
         user = db[:users].where(id: user_id).first
