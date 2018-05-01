@@ -3,14 +3,15 @@ class CreateUserFaxNumbers < ActiveRecord::Migration[5.1]
     create_table :user_fax_numbers do |t|
     	t.references :user, null: false
     	t.string :fax_number, null: false
+    	t.boolean :primary_number, null: false, default: false
+
     	t.timestamps
     end
 
-    # TO DO: HOW TO WRITE THIS PROPERLY
-    #-----------------------------------
-    # User.find_each do |user|
-    # 	fax_number = UserFaxNumber.create!(fax_number: user.fax_number, user_id: user.id)
-    # end
+    # TO DO: ENSURE THIS WORKS PROPERLY
+    User.find_each do |user|
+    	fax_number = UserFaxNumber.create!(fax_number: user.fax_number, user_id: user.id, primary_number: true)
+    end
 
     remove_column :users, :fax_number
   end
