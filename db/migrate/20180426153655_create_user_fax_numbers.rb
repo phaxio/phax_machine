@@ -3,8 +3,8 @@ class CreateUserFaxNumbers < ActiveRecord::Migration[5.1]
     create_table :user_fax_numbers do |t|
     	t.references :user, null: false
     	t.string :fax_number, null: false
-    	t.boolean :primary_number, null: false, default: false
-
+    	t.boolean :primary_number, null: false, default: true
+    	
     	t.timestamps
     end
 

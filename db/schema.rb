@@ -27,7 +27,6 @@ ActiveRecord::Schema.define(version: 20180426153655) do
   create_table "user_fax_numbers", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "fax_number", null: false
-    t.boolean "primary_number", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_user_fax_numbers_on_user_id"
