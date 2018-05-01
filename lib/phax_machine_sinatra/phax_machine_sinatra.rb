@@ -223,8 +223,10 @@ class PhaxMachineSinatra < Sinatra::Application
           {user.lower(:email) => fromEmail&.downcase}
         end.first[:user_id]
         user = db[:users].where(id: user_id).first
-        from_fax_numbers = db[:user_fax_numbers].where(user_id: user_id)
-        from_fax_number = from_fax_numbers.select { |fax_number, value| fax_number[:primary_number] }
+        from_fax_numbers = db[:user_fax_numbers].where(user_id: user_id).select do |fax_number, value|
+        	fax_number[:primary_number]
+        end
+        # from_fax_number = from_fax_numbers.select { |fax_number, value| fax_number[:primary_number] }
         # from_fax_number = db[:user_fax_numbers].where({user_id: user_id, primary_number: true})
         fax_tag = user[:fax_tag]
       ensure
