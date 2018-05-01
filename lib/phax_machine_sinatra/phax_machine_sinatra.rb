@@ -219,19 +219,11 @@ class PhaxMachineSinatra < Sinatra::Application
       set_phaxio_creds
 
       begin
-        user_ids = db[:user_emails].where do |user|
+        user_id = db[:user_emails].where do |user|
           {user.lower(:email) => fromEmail&.downcase}
-        end.all
-        p "user_ids"
-        p user_ids.inspect
+        end.first[:user_id]
         user = db[:users].where(id: user_id).first
-        # from_fax_number = db[:user_fax_numbers].where(user_id: user_id).first
-        user_ids.select do |user_id|
-        	p user_id.inspect
-        	from_fax_number = db[:user_fax_numbers].where(user_id: user_id).select { |fax_number| fax_number[:primary_number] }
-      	end
-        p "from_fax_number"
-        p from_fax_number.inspect
+        from_fax_number = db[:user_fax_numbers].where(user_id: user_id).first
         fax_tag = user[:fax_tag]
       ensure
         db.disconnect
