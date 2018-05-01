@@ -49,9 +49,9 @@ PhaxMachine.pages['user-form'] = {
         
         $(document).on('click', '.btn-remove-tel', function() {
             var inputFaxGroup = $(this).closest('.input-group');
-            inputFaxGroup.find('input[type="tel"]').val('12223334444')
-            inputFaxGroup.find('.destroy-field').val(true)
-            inputFaxGroup.hide();
+	            inputFaxGroup.find('input[type="tel"]');
+	            inputFaxGroup.find('.destroy-field').val(true);
+	            inputFaxGroup.hide();
         });
     }
 }
