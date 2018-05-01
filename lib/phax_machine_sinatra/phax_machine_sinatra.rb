@@ -114,9 +114,10 @@ class PhaxMachineSinatra < Sinatra::Application
       user_ids = db[:user_fax_numbers].where(fax_number: recipient_number).all.map do |user_fax_number| 
       	user_fax_number[:user_id]
       end
-      email_addresses = []
-      user_ids.each do |user_id|
-      	email_addresses << db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
+      email_addresses = user_ids.map do |user_id|
+      	db[:user_emails].where(user_id: user_id).all.map do |user_email|
+      		user_email[:email]
+      	end
       end
       email_addresses = email_addresses.flatten!
     ensure
@@ -287,6 +288,7 @@ class PhaxMachineSinatra < Sinatra::Application
 			errors = {}
 			fax["recipients"].each do |recipient|
 			  key = recipient["error_code"]
+
 			  errors.has_key?(key) ? errors[key]["frequency"] += 1 : errors[key] = {"frequency" => 1}
 			end
 		  errors.max_by {|error_code, amount| amount["frequency"]}.shift
