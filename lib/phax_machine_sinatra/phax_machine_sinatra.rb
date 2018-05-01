@@ -224,7 +224,7 @@ class PhaxMachineSinatra < Sinatra::Application
         end.first[:user_id]
         user = db[:users].where(id: user_id).first
         from_fax_numbers = db[:user_fax_numbers].where(user_id: user_id).all.select do |fax_number, value| 
-        	fax_number[:primary_number] == true
+        	fax_number[:primary_number]
         end.pop
         fax_tag = user[:fax_tag]
       ensure
