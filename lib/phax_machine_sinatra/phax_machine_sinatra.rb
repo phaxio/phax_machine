@@ -224,14 +224,7 @@ class PhaxMachineSinatra < Sinatra::Application
         end.first[:user_id]
         user = db[:users].where(id: user_id).first
         from_fax_numbers = db[:user_fax_numbers].where(user_id: user_id).all
-        p 'from_fax_numbers'
-        p from_fax_numbers.inspect
-        from_fax_number = from_fax_numbers.select { |fax_number, value| fax_number[:primary_number] == true }
-        from_fax_number = from_fax_number.pop
-      	p "from_fax_number"
-        p from_fax_number.inspect
-        # from_fax_number = from_fax_numbers.select { |fax_number, value| fax_number[:primary_number] }
-        # from_fax_number = db[:user_fax_numbers].where({user_id: user_id, primary_number: true})
+        from_fax_number = from_fax_numbers.select { |fax_number, value| fax_number[:primary_number] == true }.pop
         fax_tag = user[:fax_tag]
       ensure
         db.disconnect
