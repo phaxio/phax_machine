@@ -148,11 +148,11 @@ class PhaxMachineSinatra < Sinatra::Application
 
     begin
       user_ids = db[:users].where(fax_tag: fax_tag).all.map {|user| user[:id]}
-      email_addresses = []
-      user_ids.each do |user_id|
-      	email_addresses << db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
-      end
-      email_addresses = email_addresses.flatten!
+      email_addresses = user_ids.map do |user_id|
+      	db[:user_emails].where(user_id: user_id).all.map do |user_email| 
+      		user_email[:email]
+      	end
+      end.flatten!
     ensure
       db.disconnect
     end
