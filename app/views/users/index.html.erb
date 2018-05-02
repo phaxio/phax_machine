@@ -6,9 +6,22 @@
 
 <table class="table users-table">
   <thead>
+  	
+  	<small class="text-muted row">
+	  	<span>
+	  		<a><!-- This is a bit of a hack to keep the th element in line with the fax numbers -->
+  				<i class="glyphicon glyphicon-ok"></i>
+  			</a>
+	  	</span> - Primary Number
+		</small>
     <th>Edit</th>
     <th>Emails</th>
-    <th>Fax Numbers</th>
+    <th>
+    	<a><!-- This is a bit of a hack to keep the th element in line with the fax numbers -->
+    		<i class="glyphicon glyphicon-ok" style="visibility: hidden"></i>
+    	</a>
+    	Fax Numbers
+    </th>
   </thead>
   <tbody>
     <% @users.each do |user| %>
@@ -23,7 +36,23 @@
         </td>
         <td>
 	        <% user.user_fax_numbers.each do |user_fax_number| %>
-	        	<span class="user-fax-number"><%= user_fax_number.fax_number %></span>
+	        	<ul class="list-unstyled">
+		        <% if user_fax_number.primary_number %>
+		        	<li>
+		        		<a>
+		        			<i class="glyphicon glyphicon-ok"></i>
+		        		</a>
+		        		<span class="user-fax-number"><%= user_fax_number.fax_number %></span>
+		        	</li>
+		        <% else %>
+		        	<li>
+		        		<a>
+		        			<i class="glyphicon glyphicon-ok" style="visibility: hidden"></i>
+		        		</a>
+		        		<span class="user-fax-number"><%= user_fax_number.fax_number %></span>
+		        	</li>
+	        	<% end %>
+	      		</ul>
 	        <% end %>
       	</td>
       </tr>

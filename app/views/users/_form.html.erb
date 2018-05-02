@@ -31,19 +31,21 @@
   </div>
 
   <div class="form-group">
+    		<small class="text-muted">
+		      <p>Click the button to the left to designate a primary number. The primary number is the number that will be used as the caller ID when a fax is sent.</p>
+		      <p>The fax number(s) in your Phaxio account to be used by this user for sending and receiving faxes.
+		      Should be in e164 format (i.e. +15558675309).</p>
+		    </small>
     <%= f.label :user_fax_numbers, 'Fax Numbers' %>
     <div id="userFaxNumberList">
-		    <small class="text-muted">
-		      The fax number(s) in your Phaxio account to be used by this user for sending and receiving faxes.
-		      Should be in e164 format (i.e. +15558675309).
-		    </small>
 		    <%= f.fields_for :user_fax_numbers do |fax_number| %>
 		    	<div class="input-group">
+		    	<%= fax_number.hidden_field :_destroy, class: 'destroy-field' %>
 		    		<div class="radio">
 				    	<% if fax_number.object.primary_number == true %>
-				    		<%= fax_number.radio_button :primary_number, true, id: fax_number.object.id, checked: true, class: 'radio-btn' %>
+				    		<%= fax_number.radio_button :primary_number, true, checked: true, class: 'radio-btn' %>
 				    	<% else %>
-				    		<%= fax_number.radio_button :primary_number, false, id: fax_number.object.id, checked: false, class: 'radio-btn' %>
+				    		<%= fax_number.radio_button :primary_number, false, checked: false, class: 'radio-btn' %>
 				    	<% end %>
 			    	</div>
 			    	<%= fax_number.phone_field :fax_number, required: true, class: 'form-control' %>
@@ -53,7 +55,6 @@
 		          </a>
 		        </span>
 		      </div>
-	    	<%= fax_number.hidden_field :_destroy, class: 'destroy-field' %>
 	    	<% end %>
 
     </div>
@@ -61,5 +62,5 @@
     <a id="addUserFaxNumber" class="btn btn-sm btn-success">Add</a>
   </div>
 
-  <%= f.submit 'Submit', class: 'btn btn-primary' %>
+  <%= f.submit 'Submit', id: 'submit-button', class: 'btn btn-primary' %>
 <% end %>
