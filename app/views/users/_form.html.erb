@@ -33,21 +33,29 @@
   <div class="form-group">
     <%= f.label :user_fax_numbers, 'Fax Numbers' %>
     <div id="userFaxNumberList">
-	    <small class="text-muted">
-	      The fax number(s) in your Phaxio account to be used by this user for sending and receiving faxes.
-	      Should be in e164 format (i.e. +15558675309).
-	    </small>
-	    <%= f.fields_for :user_fax_numbers do |fax_number| %>
-	    	<div class="input-group">
-		    	<%= fax_number.hidden_field :_destroy, class: 'destroy-field' %>
-		    	<%= fax_number.phone_field :fax_number, required: true, class: 'form-control' %>
-		    	<span class="input-group-btn">
-	          <a class="btn btn-secondary btn-remove-tel">
-	            <i class="glyphicon glyphicon-trash"></i>
-	          </a>
-	        </span>
-		  	</div>
-    	<% end %>
+		    <small class="text-muted">
+		      The fax number(s) in your Phaxio account to be used by this user for sending and receiving faxes.
+		      Should be in e164 format (i.e. +15558675309).
+		    </small>
+		    <%= f.fields_for :user_fax_numbers do |fax_number| %>
+	    	<%= fax_number.hidden_field :_destroy, class: 'destroy-field' %>
+		    	<div class="input-group">
+		    		<div class="radio">
+				    	<% if fax_number.object.primary_number == true %>
+				    		<%= fax_number.radio_button :primary_number, true, checked: true, id: fax_number.object.id %>
+				    	<% else %>
+				    		<%= fax_number.radio_button :primary_number, false, checked: false, id: fax_number.object.id %>
+				    	<% end %>
+			    	</div>
+			    	<%= fax_number.phone_field :fax_number, required: true, class: 'form-control' %>
+			    	<span class="input-group-btn">
+		          <a class="btn btn-secondary btn-remove-tel">
+		            <i class="glyphicon glyphicon-trash"></i>
+		          </a>
+		        </span>
+		      </div>
+	    	<% end %>
+
     </div>
 	  <br>
     <a id="addUserFaxNumber" class="btn btn-sm btn-success">Add</a>

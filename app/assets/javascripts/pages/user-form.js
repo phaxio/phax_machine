@@ -28,7 +28,7 @@ PhaxMachine.pages['user-form'] = {
             newFaxInput.attr('value', '');
             newFaxInput.val('');
 
-            // Super ugly, but this time Matt copy-pasted what's above
+            // Super ugly, but this time Matt copy-pasted what's above b/c he doesn't know Vue.js
             var inputFaxGroup = $('<div class="input-group"></div>')
             var hiddenFaxFieldHtml = '<input class="destroy-field" type="hidden" value="false" name="user[user_fax_numbers_attributes][' + nextFaxIdx + '][_destroy]" id="user_user_fax_numbers_attributes_' + nextFaxIdx + '__destroy">';
             var inputFaxGroupBtn = $('<span class="input-group-btn">' + hiddenFaxFieldHtml + '<a class="btn btn-secondary btn-remove-tel" ><i class="glyphicon glyphicon-trash"></i></a></span>');
@@ -38,12 +38,14 @@ PhaxMachine.pages['user-form'] = {
             $('#userFaxNumberList').append(inputFaxGroup);
         });
 
-        // Matt again, these two functions could probably use the same class and work but again
-        // I'm ignorant of Vue and don't want to mess anything up
         $(document).on('click', '.btn-remove-email', function() {
             var inputGroup = $(this).closest('.input-group');
-            inputGroup.find('input[type="email"]').val('pending@deletion.com')
-            inputGroup.find('.destroy-field').val(true)
+            var inputId = inputGroup.find('input[type="email"]').attr('id');
+            // Added this regexp so that it doesn't find duplicates of 'pending@deletion.com' Looks for any integer
+            // 0th index of match object is the actual match
+            var inputGroupIdx = inputId.match(/[\d]/);
+            inputGroup.find('input[type="email"]').val('pending@deletion.com' + inputGroupIdx[0]);
+            inputGroup.find('.destroy-field').val(true);
             inputGroup.hide();
         });
         
