@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :params_string_to_boolean, only: [:create, :update]
 
   def index
     @users = User.all.includes(:user_emails)
@@ -49,6 +50,12 @@ class UsersController < ApplicationController
   end
 
   private
+  	def params_string_to_boolean
+  		params[:user][:user_fax_numbers_attributes].each do |key, user_fax_number|
+  			user_fax_number.has_key?("primary_number") ? user_fax_number["primary_number"] = true : user_fax_number["primary_number"] = false
+  		end
+  	end
+
     def user_params
       params.require(:user).permit( {user_fax_numbers_attributes: [:fax_number, :_destroy, :id, :user_id, :primary_number]}, {user_emails_attributes: [:email, :id, :_destroy]} )
     end

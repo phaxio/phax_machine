@@ -38,13 +38,12 @@
 		      Should be in e164 format (i.e. +15558675309).
 		    </small>
 		    <%= f.fields_for :user_fax_numbers do |fax_number| %>
-	    	<%= fax_number.hidden_field :_destroy, class: 'destroy-field' %>
 		    	<div class="input-group">
 		    		<div class="radio">
 				    	<% if fax_number.object.primary_number == true %>
-				    		<%= fax_number.radio_button :primary_number, true, checked: true, id: fax_number.object.id %>
+				    		<%= fax_number.radio_button :primary_number, true, id: fax_number.object.id, checked: true, class: 'radio-btn' %>
 				    	<% else %>
-				    		<%= fax_number.radio_button :primary_number, false, checked: false, id: fax_number.object.id %>
+				    		<%= fax_number.radio_button :primary_number, false, id: fax_number.object.id, checked: false, class: 'radio-btn' %>
 				    	<% end %>
 			    	</div>
 			    	<%= fax_number.phone_field :fax_number, required: true, class: 'form-control' %>
@@ -54,6 +53,7 @@
 		          </a>
 		        </span>
 		      </div>
+	    	<%= fax_number.hidden_field :_destroy, class: 'destroy-field' %>
 	    	<% end %>
 
     </div>

@@ -55,5 +55,27 @@ PhaxMachine.pages['user-form'] = {
 	            inputFaxGroup.find('.destroy-field').val(true);
 	            inputFaxGroup.hide();
         });
+
+        $(document).on('click', '.radio-btn', function() {
+        		var radioButtonValue = $(this).prop('value');
+        		var allRadioButtons = $('.radio-btn');
+        		if (radioButtonValue) {
+        				allRadioButtons.each(function() {
+        						if ($(this).prop('value') && $(this).attr('id') !== $(event.target).attr('id')) {
+        								$(this).prop('value', false);
+        								$(this).attr('checked', false);
+        								console.log($(this).prop('checked'))
+        						} else if ($(this).prop('value') && $(this).attr('id') === $(event.target).attr('id')) {
+        								$(this).prop('value', true);
+        								$(this).attr('checked', true);
+        								console.log($(this).prop('checked'))
+        						} else {
+        								$(this).prop('value', false);
+        								$(this).attr('checked', false);
+        								console.log($(this).prop('checked'))
+        						}
+        				})
+        		}
+        });
     }
 }
