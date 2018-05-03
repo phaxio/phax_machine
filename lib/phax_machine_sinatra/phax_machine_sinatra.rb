@@ -98,7 +98,7 @@ class PhaxMachineSinatra < Sinatra::Application
     end
 
     sender = Mail::AddressList.new(params['from']).addresses.first.address
-    sendFax(sender, params['recipient'],files)
+    sendFax(sender, params['recipient'], files)
     "OK"
   end
 
@@ -109,9 +109,17 @@ class PhaxMachineSinatra < Sinatra::Application
   post '/fax_received' do
     @fax = JSON.parse params['fax']
     recipient_number = Phonelib.parse(@fax['to_number']).e164
+
     begin
-      user_id = db[:users].where(fax_number: recipient_number).first[:id]
-      email_addresses = db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
+      user_ids = db[:user_fax_numbers].where(fax_number: recipient_number).all.map do |user_fax_number| 
+      	user_fax_number[:user_id]
+      end
+
+      email_addresses = user_ids.map do |user_id|
+      	db[:user_emails].where(user_id: user_id).all.map do |user_email|
+      		user_email[:email]
+      	end
+      end.flatten!
     ensure
       db.disconnect
     end
@@ -137,9 +145,14 @@ class PhaxMachineSinatra < Sinatra::Application
   post '/fax_sent' do
     @fax = JSON.parse params['fax']
     fax_tag = @fax['tags']['user']
+
     begin
-      user_id = db[:users].where(fax_tag: fax_tag).first[:id]
-      email_addresses = db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
+      user_ids = db[:users].where(fax_tag: fax_tag).all.map {|user| user[:id]}
+      email_addresses = user_ids.map do |user_id|
+      	db[:user_emails].where(user_id: user_id).all.map do |user_email| 
+      		user_email[:email]
+      	end
+      end.flatten!
     ensure
       db.disconnect
     end
@@ -211,7 +224,9 @@ class PhaxMachineSinatra < Sinatra::Application
           {user.lower(:email) => fromEmail&.downcase}
         end.first[:user_id]
         user = db[:users].where(id: user_id).first
-        from_fax_number = user[:fax_number]
+        from_fax_number = db[:user_fax_numbers].where(user_id: user_id).all.select do |fax_number, value| 
+        	fax_number[:primary_number]
+        end.pop
         fax_tag = user[:fax_tag]
       ensure
         db.disconnect
@@ -219,7 +234,7 @@ class PhaxMachineSinatra < Sinatra::Application
 
       number = Mail::Address.new(toEmail).local
 
-      options = {to: number, caller_id: from_fax_number, :"tag[user]" => fax_tag}
+      options = {to: number, caller_id: from_fax_number[:fax_number], :"tag[user]" => fax_tag}
 
       filenames.each_index do |idx|
         options["filename[#{idx}]"] = File.new(filenames[idx])
@@ -268,16 +283,13 @@ class PhaxMachineSinatra < Sinatra::Application
       @db ||= Sequel.connect(ENV["DATABASE_URL"])
     end
 
-		# if there are two error_codes with the same frequency of occurrance, the error found first (first recipient) takes precedence
+		# if two error_codes have the same frequency, the error found first (first recipient) takes precedence
 		def most_common_error(fax)
 			errors = {}
 			fax["recipients"].each do |recipient|
 			  key = recipient["error_code"]
-			  if errors.has_key?(key)
-			    errors[key]["frequency"] += 1
-			  else
-			    errors[key] = {"frequency" => 1}
-			  end
+
+			  errors.has_key?(key) ? errors[key]["frequency"] += 1 : errors[key] = {"frequency" => 1}
 			end
 		  errors.max_by {|error_code, amount| amount["frequency"]}.shift
 		end

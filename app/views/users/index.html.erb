@@ -6,9 +6,22 @@
 
 <table class="table users-table">
   <thead>
+  	
+  	<small class="text-muted row">
+	  	<span>
+	  		<a>
+  				<i class="glyphicon glyphicon-ok"></i>
+  			</a>
+	  	</span> - Primary Number. The fax number in your Phaxio account you set as your primary number is used as the Caller ID by this user for sending and receiving faxes. Should be in e164 format (i.e. +15558675309).
+		</small>
     <th>Edit</th>
     <th>Emails</th>
-    <th>Fax Number</th>
+    <th>
+    	<a><!-- This is a bit of a hack to keep the <th> element in line with the fax numbers -->
+    		<i class="glyphicon glyphicon-ok" style="visibility: hidden"></i>
+    	</a>
+    	Fax Numbers
+    </th>
   </thead>
   <tbody>
     <% @users.each do |user| %>
@@ -21,7 +34,27 @@
             <% end %>
           <% end %>
         </td>
-        <td><%= user.fax_number %></td>
+        <td>
+	        <% user.user_fax_numbers.each do |user_fax_number| %>
+	        	<ul class="list-unstyled">
+		        <% if user_fax_number.primary_number %>
+		        	<li>
+		        		<a>
+		        			<i class="glyphicon glyphicon-ok"></i>
+		        		</a>
+		        		<span class="user-fax-number"><%= user_fax_number.fax_number %></span>
+		        	</li>
+		        <% else %>
+		        	<li>
+		        		<a>
+		        			<i class="glyphicon glyphicon-ok" style="visibility: hidden"></i>
+		        		</a>
+		        		<span class="user-fax-number"><%= user_fax_number.fax_number %></span>
+		        	</li>
+	        	<% end %>
+	      		</ul>
+	        <% end %>
+      	</td>
       </tr>
     <% end %>
   </tbody>
