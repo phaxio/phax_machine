@@ -105,7 +105,7 @@ function radioButtonIsChecked(allRadioButtons) {
 	return isChecked;
 }
 
-function createUserAlert(type, message) {
+function createUserAlert(type, message) { 
 	var alert = $("<div class='alert alert-dismissable alert-" + type + "'></div>")
 	var closeAlertButton = $(
 		'<button type="button" class="close" data-dismiss="alert" aria-label="Close">'

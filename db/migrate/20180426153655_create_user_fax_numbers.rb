@@ -8,7 +8,6 @@ class CreateUserFaxNumbers < ActiveRecord::Migration[5.1]
     	t.timestamps
     end
 
-    # TO DO: ENSURE THIS WORKS PROPERLY
     User.find_each do |user|
     	fax_number = UserFaxNumber.create!(fax_number: user.fax_number, user_id: user.id)
     end
