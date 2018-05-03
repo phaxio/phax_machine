@@ -62,7 +62,7 @@ PhaxMachine.pages['user-form'] = {
         		ensureNoBlankRadioButtons();
         });
 
-        $(document).on('click', '.radio-btn', function() {
+        $(document).on('click', '.radio-btn', function(event) {
         		ensureNoBlankRadioButtons();
         		var radioButtonValue = $(this).prop('value');
         		var allRadioButtons = $('.radio-btn');
