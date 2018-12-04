@@ -77,6 +77,9 @@ class PhaxMachineSinatra < Sinatra::Application
   end
 
   post '/mailgun' do
+  	p "=" * 50
+  	p params
+  	p "=" * 50
     if not params['from']
       return [400, "Must include a sender"]
     elsif not params['recipient']
@@ -110,6 +113,9 @@ class PhaxMachineSinatra < Sinatra::Application
 
   post '/fax_received' do
     @fax = JSON.parse params['fax']
+    p "=" * 50
+    p @fax
+    p "=" * 50
     recipient_number = Phonelib.parse(@fax['to_number']).e164
     begin
       user_id = db[:users].where(fax_number: recipient_number).first[:id]
@@ -118,10 +124,13 @@ class PhaxMachineSinatra < Sinatra::Application
       db.disconnect
     end
 
+    p "=" * 50
     fax_from = @fax['from_number']
+    p fax_from
     fax_file_name = params['filename']['filename']
     fax_file_contents = params['filename']['tempfile'].read
     email_subject = "Fax received from #{fax_from}"
+    p "=" * 50
 
     Pony.mail(
       to: email_addresses,
