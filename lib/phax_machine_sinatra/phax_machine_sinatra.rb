@@ -109,11 +109,7 @@ class PhaxMachineSinatra < Sinatra::Application
   end
 
   post '/fax_received' do
-  	p "FAX RECEIVED"
     @fax = JSON.parse params['fax']
-    p "=" * 50
-    p @fax
-    p "=" * 50
     recipient_number = Phonelib.parse(@fax['to_number']).e164
     begin
       user_id = db[:users].where(fax_number: recipient_number).first[:id]
@@ -121,14 +117,14 @@ class PhaxMachineSinatra < Sinatra::Application
     ensure
       db.disconnect
     end
-
-    p "=" * 50
+    p "*" * 55
+    p @fax
     fax_from = @fax['from_number']
     p fax_from
+    p "*" * 55
     fax_file_name = params['filename']['filename']
     fax_file_contents = params['filename']['tempfile'].read
     email_subject = "Fax received from #{fax_from}"
-    p "=" * 50
 
     Pony.mail(
       to: email_addresses,
