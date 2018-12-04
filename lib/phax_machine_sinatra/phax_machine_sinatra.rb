@@ -127,9 +127,13 @@ class PhaxMachineSinatra < Sinatra::Application
     end
 
     fax_from = @fax['from_number']
+    p "========================================================"
     p fax_from
     fax_file_name = params['filename']['filename']
     fax_file_contents = params['filename']['tempfile'].read
+    p fax_file_name
+    p fax_file_contents
+    p "========================================================"
     email_subject = "Fax received from #{fax_from}"
 
     Pony.mail(
