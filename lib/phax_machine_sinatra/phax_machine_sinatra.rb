@@ -109,6 +109,7 @@ class PhaxMachineSinatra < Sinatra::Application
   end
 
   post '/fax_received' do
+  	p "FAX RECEIVED"
     @fax = JSON.parse params['fax']
     p "=" * 50
     p @fax
