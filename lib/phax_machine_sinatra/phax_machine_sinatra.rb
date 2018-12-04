@@ -80,6 +80,8 @@ class PhaxMachineSinatra < Sinatra::Application
   	p "=" * 50
   	p params
   	p "=" * 50
+  	p params['recipient']
+  	p params['from']
     if not params['from']
       return [400, "Must include a sender"]
     elsif not params['recipient']
@@ -103,6 +105,7 @@ class PhaxMachineSinatra < Sinatra::Application
     end
 
     sender = Mail::AddressList.new(params['from']).addresses.first.address
+    p sender
     sendFax(sender, params['recipient'],files)
     "OK"
   end
