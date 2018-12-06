@@ -109,9 +109,7 @@ class PhaxMachineSinatra < Sinatra::Application
   end
 
   post '/fax_received' do
-  	p "=" * 60
   	p params['fax']
-  	p "=" * 60
     @fax = JSON.parse params['fax']
     recipient_number = Phonelib.parse(@fax['to_number']).e164
     begin
@@ -140,12 +138,11 @@ class PhaxMachineSinatra < Sinatra::Application
     }
 
     if params['filename']
-    # The Pony gem will attempt to run gsub() on the attachment at some point, so I've moved the options
-    #   out of the method arguments and placed them above. The key with attachment data is added to 
-    #   pony_options if an attachment is present. This shuffling prevents errors if a user has no attachment
+    # The Pony gem will attempt to run gsub() on the attachment at some point, so I've moved the options out
+    # of the method arguments and placed them above. This shuffling prevents errors if a user has no attachment
     	fax_file_name = params['filename']['filename']
    		fax_file_contents = params['filename']['tempfile'].read
-   		pony_options[:attachments] = {fax_file_name => fax_file_contents}
+   		pony_options[:attachments] = { fax_file_name => fax_file_contents }
    	end
 
     Pony.mail(pony_options)
