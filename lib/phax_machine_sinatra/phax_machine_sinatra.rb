@@ -136,20 +136,18 @@ class PhaxMachineSinatra < Sinatra::Application
       via_options: smtp_options
     }
 
-    if params['filename']
     # The Pony gem will attempt to run gsub() on the attachment at some point, so I've moved the options out
     # of the method arguments and placed them above. This shuffling prevents errors if a user has no attachment
+    if params['filename']
     	fax_file_name = params['filename']['filename']
    		fax_file_contents = params['filename']['tempfile'].read
    		pony_options[:attachments] = { fax_file_name => fax_file_contents }
    	end
-
+   	
     Pony.mail(pony_options)
   end
 
   post '/fax_sent' do
-  	p "========================="
-  	p params
     @fax = JSON.parse params['fax']
     fax_tag = @fax['tags']['user']
     begin
