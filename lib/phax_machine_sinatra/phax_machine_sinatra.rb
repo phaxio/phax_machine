@@ -124,8 +124,8 @@ class PhaxMachineSinatra < Sinatra::Application
     	email_subject = "Fax received from #{fax_from}"
     else
     	logger.info "#{recipient_number} received a fax with a failure status from #{fax_from} with no attachment"
-    # 	email_subject =	"#{fax_from} attempted to fax you"
-    # 	@fax['most_common_error'] = @fax['error_code']
+    	@fax['most_common_error'] = @fax['error_code']
+    	email_subject =	"Your fax failed because: #{@fax["most_common_error"]}"
     end
 
     pony_options = {
@@ -145,11 +145,7 @@ class PhaxMachineSinatra < Sinatra::Application
    		pony_options[:attachments] = { fax_file_name => fax_file_contents }
    	end
 
-   	# Comment out the 'if @fax['status'] == 'success' if the user would like to receive
-   	# emails stating a landline tried to fax them.
-    if @fax['status'] == "success"	
-    	Pony.mail(pony_options)
-    end
+    Pony.mail(pony_options)
   end
 
   post '/fax_sent' do
