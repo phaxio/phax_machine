@@ -109,15 +109,8 @@ class PhaxMachineSinatra < Sinatra::Application
   end
 
   post '/fax_received' do
-  	p "FAX_RECEIVED"
     @fax = JSON.parse params['fax']
-    p @fax
-    p "*" * 55
-    p params['fax']
-    p "*" * 55
-    p params
     recipient_number = Phonelib.parse(@fax['to_number']).e164
-    p recipient_number
     begin
       user_id = db[:users].where(fax_number: recipient_number).first[:id]
       p user_id
@@ -130,9 +123,14 @@ class PhaxMachineSinatra < Sinatra::Application
 
     fax_from = @fax['from_number']
  		fax_file_contents = ''
+ 		
+    if @fax['status'] == "success" ?  : 
+    	email_subject = "Fax received from #{fax_from}"
+    else
+    	email_subject =	"#{fax_from} attempted to fax #{@fax['to_number']}"
+    	@fax['most_common_error'] = @fax['error_code']
+    end
 
-    email_subject = "Fax received from #{fax_from}"
-    
     pony_options = {
       to: email_addresses,
       from: smtp_from_address,
@@ -142,7 +140,6 @@ class PhaxMachineSinatra < Sinatra::Application
       via_options: smtp_options
     }
     p "========================================================"
-    p fax_from
 
     if params['filename']
     	fax_file_name = params['filename']['filename']
