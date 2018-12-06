@@ -123,8 +123,8 @@ class PhaxMachineSinatra < Sinatra::Application
 
     fax_from = @fax['from_number']
  		fax_file_contents = ''
- 		
-    if @fax['status'] == "success" ?  : 
+
+    if @fax['status'] == "success"
     	email_subject = "Fax received from #{fax_from}"
     else
     	email_subject =	"#{fax_from} attempted to fax #{@fax['to_number']}"
