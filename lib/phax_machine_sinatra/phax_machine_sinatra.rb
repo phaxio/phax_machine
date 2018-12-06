@@ -129,30 +129,34 @@ class PhaxMachineSinatra < Sinatra::Application
     end
 
     fax_from = @fax['from_number']
+ 		fax_file_contents = ''
+
+    
+    pony_options = {
+      to: email_addresses,
+      from: smtp_from_address,
+      subject: email_subject,
+      html_body: erb(:fax_email, layout: false),
+      via: :smtp,
+      via_options: smtp_options
+    }
     p "========================================================"
     p fax_from
+
     if params['filename']
     	fax_file_name = params['filename']['filename']
    		fax_file_contents = params['filename']['tempfile'].read
-   	else
-   		fax_file_contents = ''
+   		pony_options[:attachments} = {
+        fax_file_name => fax_file_contents
+      },
    	end
+   	p pony_options
     p fax_file_name
     p fax_file_contents
     p "========================================================"
     email_subject = "Fax received from #{fax_from}"
 
-    Pony.mail({
-      to: email_addresses,
-      from: smtp_from_address,
-      subject: email_subject,
-      html_body: erb(:fax_email, layout: false),
-      attachments: {
-        fax_file_name => fax_file_contents
-      },
-      via: :smtp,
-      via_options: smtp_options
-    })
+    Pony.mail(pony_options)
   end
 
   post '/fax_sent' do
