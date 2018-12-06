@@ -131,6 +131,7 @@ class PhaxMachineSinatra < Sinatra::Application
     fax_from = @fax['from_number']
  		fax_file_contents = ''
 
+    email_subject = "Fax received from #{fax_from}"
     
     pony_options = {
       to: email_addresses,
@@ -153,7 +154,6 @@ class PhaxMachineSinatra < Sinatra::Application
     p fax_file_name
     p fax_file_contents
     p "========================================================"
-    email_subject = "Fax received from #{fax_from}"
 
     Pony.mail(pony_options)
   end
