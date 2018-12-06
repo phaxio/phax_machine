@@ -143,10 +143,10 @@ class PhaxMachineSinatra < Sinatra::Application
     if params['filename']
     	fax_file_name = params['filename']['filename']
    		fax_file_contents = params['filename']['tempfile'].read
-   		
+
    		fax_received_mail_options[:attachments] = {
         fax_file_name => fax_file_contents
-      },
+      }
    	end
 
     p fax_file_name
