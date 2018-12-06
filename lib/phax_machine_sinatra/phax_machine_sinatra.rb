@@ -131,7 +131,7 @@ class PhaxMachineSinatra < Sinatra::Application
     fax_from = @fax['from_number']
     p "========================================================"
     p fax_from
-    if params['filename']['filename']
+    if params['filename']
     	fax_file_name = params['filename']['filename']
    		fax_file_contents = params['filename']['tempfile'].read
    	end
