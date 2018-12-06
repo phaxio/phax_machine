@@ -122,7 +122,8 @@ class PhaxMachineSinatra < Sinatra::Application
 
     if @fax['status'] == "success"
     	email_subject = "Fax received from #{fax_from}"
-    # else
+    else
+    	logger.info "#{recipient_number} received a fax with a failure status from #{fax_from} with no attachment"
     # 	email_subject =	"#{fax_from} attempted to fax you"
     # 	@fax['most_common_error'] = @fax['error_code']
     end
