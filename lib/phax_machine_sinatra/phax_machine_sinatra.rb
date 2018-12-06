@@ -146,9 +146,9 @@ class PhaxMachineSinatra < Sinatra::Application
     if params['filename']
     	fax_file_name = params['filename']['filename']
    		fax_file_contents = params['filename']['tempfile'].read
-   		pony_options[:attachments} = {fax_file_name => fax_file_contents}
+   		pony_options[:attachments] = {fax_file_name => fax_file_contents}
    	end
-   	
+
    	p pony_options
     p fax_file_name
     p fax_file_contents
