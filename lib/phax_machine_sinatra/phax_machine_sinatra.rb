@@ -122,11 +122,9 @@ class PhaxMachineSinatra < Sinatra::Application
 
     if @fax['status'] == "success"
     	email_subject = "Fax received from #{fax_from}"
-    else
-    	# Not running the most_common_error method because this is intended for when a landline/cellphones attempts
-    	#  to fax with no attachment. An email with no attachment is caught in the /mailgun route before it gets here
-    	email_subject =	"#{fax_from} attempted to fax you"
-    	@fax['most_common_error'] = @fax['error_code']
+    # else
+    # 	email_subject =	"#{fax_from} attempted to fax you"
+    # 	@fax['most_common_error'] = @fax['error_code']
     end
 
     pony_options = {
@@ -146,7 +144,11 @@ class PhaxMachineSinatra < Sinatra::Application
    		pony_options[:attachments] = { fax_file_name => fax_file_contents }
    	end
 
-    Pony.mail(pony_options)
+   	# Comment out the 'if @fax['status'] == 'success' if the user would like to receive
+   	# emails stating a landline tried to fax them.
+    if @fax['status'] == "success"	
+    	Pony.mail(pony_options)
+    end
   end
 
   post '/fax_sent' do
