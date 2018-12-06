@@ -1,5 +1,9 @@
 <% if @fax["direction"] == "received" %>
-  <h1>You've received a new fax!</h1>
+	<% if @fax['status'] == "success" %>
+  	<h1>You've received a new fax!</h1>
+  <% else %>
+  	<h1><%= @fax['from_number'] %> attempted to fax you.</h1>
+  <% end %>
 <% else %>
 	<% if @fax["status"] == "success" %>
   	<h1>Your fax was sent successfully</h1>
@@ -20,7 +24,9 @@
 <% end %>
 
 <% if @fax["direction"] == "received" %>
-  <p>The document has been attached to this email.</p>
+	<% if @fax["status"] == "success" %>
+  	<p>The document has been attached to this email.</p>
+  <% end %>
 <% else %>
   <h2>Recipients</h2>
   <% @fax["recipients"].each do |recipient| %>

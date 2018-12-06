@@ -119,21 +119,33 @@ class PhaxMachineSinatra < Sinatra::Application
     end
 
     fax_from = @fax['from_number']
-    fax_file_name = params['filename']['filename']
-    fax_file_contents = params['filename']['tempfile'].read
-    email_subject = "Fax received from #{fax_from}"
 
-    Pony.mail(
+    if @fax['status'] == "success"
+    	email_subject = "Fax received from #{fax_from}"
+    else
+    	logger.info "#{recipient_number} received a fax with a failure status from #{fax_from} with no attachment"
+    	@fax['most_common_error'] = @fax['error_code']
+    	email_subject =	"Your fax failed because: #{@fax["most_common_error"]}"
+    end
+
+    pony_options = {
       to: email_addresses,
       from: smtp_from_address,
       subject: email_subject,
       html_body: erb(:fax_email, layout: false),
-      attachments: {
-        fax_file_name => fax_file_contents
-      },
       via: :smtp,
       via_options: smtp_options
-    )
+    }
+
+    # The Pony gem will attempt to run gsub() on the attachment at some point, so I've moved the options out
+    # of the method arguments and placed them above. This shuffling prevents errors if a user has no attachment
+    if params['filename']
+    	fax_file_name = params['filename']['filename']
+   		fax_file_contents = params['filename']['tempfile'].read
+   		pony_options[:attachments] = { fax_file_name => fax_file_contents }
+   	end
+
+    Pony.mail(pony_options)
   end
 
   post '/fax_sent' do
