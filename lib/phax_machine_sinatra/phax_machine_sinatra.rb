@@ -109,8 +109,6 @@ class PhaxMachineSinatra < Sinatra::Application
   end
 
   post '/fax_received' do
-  	p "*******"
-  	p params
     @fax = JSON.parse params['fax']
     recipient_number = Phonelib.parse(@fax['to_number']).e164
     begin
@@ -150,6 +148,8 @@ class PhaxMachineSinatra < Sinatra::Application
   end
 
   post '/fax_sent' do
+  	p "========================="
+  	p params
     @fax = JSON.parse params['fax']
     fax_tag = @fax['tags']['user']
     begin
