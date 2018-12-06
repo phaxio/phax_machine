@@ -109,20 +109,19 @@ class PhaxMachineSinatra < Sinatra::Application
   end
 
   post '/fax_received' do
+  	p "=" * 60
+  	p params['fax']
+  	p "=" * 60
     @fax = JSON.parse params['fax']
     recipient_number = Phonelib.parse(@fax['to_number']).e164
     begin
       user_id = db[:users].where(fax_number: recipient_number).first[:id]
-      p user_id
-      p "========================================================"
       email_addresses = db[:user_emails].where(user_id: user_id).all.map { |user_email| user_email[:email] }
-      p email_addresses
     ensure
       db.disconnect
     end
 
     fax_from = @fax['from_number']
- 		fax_file_contents = ''
 
     if @fax['status'] == "success"
     	email_subject = "Fax received from #{fax_from}"
@@ -139,18 +138,15 @@ class PhaxMachineSinatra < Sinatra::Application
       via: :smtp,
       via_options: smtp_options
     }
-    p "========================================================"
 
     if params['filename']
+    # The Pony gem will attempt to run gsub() on the attachment at some point, so I've moved the options
+    #   out of the method arguments and placed them above. The key with attachment data is added to 
+    #   pony_options if an attachment is present. This shuffling prevents errors if a user has no attachment
     	fax_file_name = params['filename']['filename']
    		fax_file_contents = params['filename']['tempfile'].read
    		pony_options[:attachments] = {fax_file_name => fax_file_contents}
    	end
-
-   	p pony_options
-    p fax_file_name
-    p fax_file_contents
-    p "========================================================"
 
     Pony.mail(pony_options)
   end
